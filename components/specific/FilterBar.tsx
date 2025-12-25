@@ -99,56 +99,58 @@ export default function FilterBar({ city, listingCount, onFilterChange, currentF
         {listingCount} Flats Available in {city.name}
       </div>
 
-      <div className="flex items-center gap-2 justify-center md:justify-end">
-        <button
-          onClick={handleMapClick}
-          disabled={loadingMap}
-          className="flex items-center hover:bg-slate-100 cursor-pointer gap-2 bg-white border-2 border-slate-200 px-3 py-1.5 rounded-lg text-xs font-medium disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          <Map size={16} className="text-green-500" />
-          <span className="text-slate-800">{loadingMap ? 'Loading...' : 'Map'}</span>
-        </button>
+      <div className="w-full md:w-auto overflow-x-auto pb-2 md:pb-0 -mx-4 px-4 md:mx-0 md:px-0 [&::-webkit-scrollbar]:hidden">
+        <div className="flex items-center gap-2 w-max md:w-auto mx-auto md:justify-end">
+          <button
+            onClick={handleMapClick}
+            disabled={loadingMap}
+            className="flex items-center hover:bg-slate-100 cursor-pointer gap-2 bg-white border-2 border-slate-200 px-3 py-1.5 rounded-lg text-xs font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <Map size={16} className="text-green-500" />
+            <span className="text-slate-800">{loadingMap ? 'Loading...' : 'Map'}</span>
+          </button>
 
-        <Toggle
-          pressed={currentFilters.genderFilter === 'male'}
-          onPressedChange={handleMaleToggle}
-          aria-label="Filter for Male"
-          size="sm"
-          variant="outline"
-          className="cursor-pointer transition-colors data-[state=on]:bg-transparent border-2 border-slate-200 data-[state=on]:border-blue-500 data-[state=on]:*:[svg]:fill-blue-500 data-[state=on]:bg-blue-500 data-[state=on]:*:[svg]:stroke-white"
-        >
-          <Mars />
-        </Toggle>
+          <Toggle
+            pressed={currentFilters.genderFilter === 'male'}
+            onPressedChange={handleMaleToggle}
+            aria-label="Filter for Male"
+            size="sm"
+            variant="outline"
+            className="cursor-pointer transition-colors data-[state=on]:bg-transparent border-2 border-slate-200 data-[state=on]:border-blue-500 data-[state=on]:*:[svg]:fill-blue-500 data-[state=on]:bg-blue-500 data-[state=on]:*:[svg]:stroke-white"
+          >
+            <Mars />
+          </Toggle>
 
-        <Toggle
-          pressed={currentFilters.genderFilter === 'female'}
-          onPressedChange={handleFemaleToggle}
-          aria-label="Filter for Female"
-          size="sm"
-          variant="outline"
-          className="cursor-pointer transition-colors data-[state=on]:bg-transparent border-2 border-slate-200 data-[state=on]:border-pink-500 data-[state=on]:*:[svg]:fill-pink-500 data-[state=on]:bg-pink-500 data-[state=on]:*:[svg]:stroke-white"
-        >
-          <Venus />
-        </Toggle>
+          <Toggle
+            pressed={currentFilters.genderFilter === 'female'}
+            onPressedChange={handleFemaleToggle}
+            aria-label="Filter for Female"
+            size="sm"
+            variant="outline"
+            className="cursor-pointer transition-colors data-[state=on]:bg-transparent border-2 border-slate-200 data-[state=on]:border-pink-500 data-[state=on]:*:[svg]:fill-pink-500 data-[state=on]:bg-pink-500 data-[state=on]:*:[svg]:stroke-white"
+          >
+            <Venus />
+          </Toggle>
 
-        <Toggle
-          pressed={currentFilters.brokerageFree}
-          onPressedChange={handleBrokerageToggle}
-          aria-label="Filter Broker Free"
-          size="sm"
-          variant="outline"
-          className="cursor-pointer transition-colors data-[state=on]:bg-transparent border-2 border-slate-200 data-[state=on]:border-amber-500 data-[state=on]:*:[svg]:fill-amber-500 data-[state=on]:bg-amber-500 px-3 data-[state=on]:*:[svg]:stroke-slate-900 text-xs"
-        >
-          <IndianRupee />Broker Free
-        </Toggle>
+          <Toggle
+            pressed={currentFilters.brokerageFree}
+            onPressedChange={handleBrokerageToggle}
+            aria-label="Filter Broker Free"
+            size="sm"
+            variant="outline"
+            className="cursor-pointer transition-colors data-[state=on]:bg-transparent border-2 border-slate-200 data-[state=on]:border-amber-500 data-[state=on]:*:[svg]:fill-amber-500 data-[state=on]:bg-amber-500 px-3 data-[state=on]:*:[svg]:stroke-slate-900 text-xs"
+          >
+            <IndianRupee />Broker Free
+          </Toggle>
 
-        <button
-          onClick={() => setShowFilters(true)}
-          className="hover:bg-slate-100 cursor-pointer flex items-center gap-2 bg-white border-2 border-slate-200 px-3 py-1.5 rounded-lg text-xs font-medium"
-        >
-          <SlidersHorizontal size={16} className="text-slate-600" />
-          <span className="text-slate-800">Filters</span>
-        </button>
+          <button
+            onClick={() => setShowFilters(true)}
+            className="hover:bg-slate-100 cursor-pointer flex items-center gap-2 bg-white border-2 border-slate-200 px-3 py-1.5 rounded-lg text-xs font-medium"
+          >
+            <SlidersHorizontal size={16} className="text-slate-600" />
+            <span className="text-slate-800">Filters</span>
+          </button>
+        </div>
       </div>
 
       {/* Map Modal */}

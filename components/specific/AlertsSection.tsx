@@ -8,7 +8,7 @@ export default function AlertsSection() {
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="lg:grid lg:grid-cols-2 lg:gap-16 items-center">
                     <div className="mb-12 lg:mb-0">
-                        <div className="inline-flex items-center px-3 py-1 rounded-full bg-amber-100 text-amber-800 text-sm font-medium mb-6">
+                        <div className="inline-flex items-center px-3 py-1 rounded-full bg-slate-900 text-green-300 text-sm font-medium mb-6">
                             <Bell className="w-4 h-4 mr-2" />
                             Smart Alerts
                         </div>
@@ -35,6 +35,7 @@ export default function AlertsSection() {
                         </div>
 
                         <button className="mt-10 inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-lg text-white bg-slate-900 hover:bg-slate-800 transition-colors">
+                            <Bell className="w-5 h-5 mr-2 text-green-300" />
                             Create Alert
                         </button>
                     </div>
@@ -48,15 +49,15 @@ export default function AlertsSection() {
                         <div className="relative bg-white border border-slate-200 rounded-2xl shadow-xl p-6 md:p-8">
                             <div className="flex items-center justify-between mb-6">
                                 <div className="flex items-center space-x-3">
-                                    <div className="w-10 h-10 bg-indigo-100 rounded-full flex items-center justify-center">
-                                        <Bell className="w-5 h-5 text-indigo-600" />
+                                    <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
+                                        <Bell className="w-5 h-5 text-green-600" />
                                     </div>
                                     <div>
                                         <div className="font-semibold text-slate-900">New Match Found!</div>
                                         <div className="text-xs text-slate-500">Just now</div>
                                     </div>
                                 </div>
-                                <div className="h-2 w-2 bg-blue-500 rounded-full"></div>
+                                <div className="h-2 w-2 bg-green-500 rounded-full"></div>
                             </div>
 
                             <div className="space-y-4">
@@ -72,7 +73,7 @@ export default function AlertsSection() {
 
                             <div className="mt-6 pt-6 border-t border-slate-100 flex justify-between items-center text-sm">
                                 <span className="text-slate-500">Auto-refresh active</span>
-                                <span className="text-indigo-600 font-medium cursor-pointer">View Settings</span>
+                                <span className="text-slate-800 rounded-full font-medium cursor-pointer">View Settings</span>
                             </div>
                         </div>
                     </div>

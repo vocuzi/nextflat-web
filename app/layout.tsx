@@ -21,7 +21,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${readex_pro.variable} antialiased bg-green-50`}
+        className={`${readex_pro.variable} antialiased`}
       >
         {children}
       </body>

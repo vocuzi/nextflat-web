@@ -1,6 +1,8 @@
 
 import { Smartphone, Download } from "lucide-react";
 import { NfBtn } from "../generic/buttons/Btn";
+import { FaAppStore } from "react-icons/fa6";
+import { FaGooglePlay } from "react-icons/fa6";
 
 export default function AppDownloadCta() {
     return (
@@ -19,14 +21,14 @@ export default function AppDownloadCta() {
                     </p>
                     <div className="flex flex-col sm:flex-row gap-4 pt-4 justify-center md:justify-start">
                         <button className="flex items-center gap-3 bg-white text-slate-900 px-5 py-3 rounded-xl font-bold hover:bg-slate-100 transition-colors">
-                            <Download size={20} />
+                            <FaAppStore size={20} />
                             <div className="text-left leading-none">
                                 <div className="text-[10px] uppercase font-bold text-slate-500">Download on the</div>
                                 <div className="text-sm">App Store</div>
                             </div>
                         </button>
                         <button className="flex items-center gap-3 bg-slate-800 text-white border border-slate-700 px-5 py-3 rounded-xl font-bold hover:bg-slate-700 transition-colors">
-                            <Download size={20} />
+                            <FaGooglePlay size={20} />
                             <div className="text-left leading-none">
                                 <div className="text-[10px] uppercase font-bold text-slate-400">Get it on</div>
                                 <div className="text-sm">Google Play</div>

@@ -4,17 +4,17 @@ import { Rocket, ShieldCheck, Users } from 'lucide-react';
 
 const features = [
     {
-        icon: <Rocket className="w-6 h-6 text-indigo-600" />,
+        icon: <Rocket className="w-6 h-6 text-slate-900" />,
         title: "Instant Connections",
         description: "Connect directly with verified flatmates and landlords without the middleman delays."
     },
     {
-        icon: <ShieldCheck className="w-6 h-6 text-indigo-600" />,
+        icon: <ShieldCheck className="w-6 h-6 text-slate-900" />,
         title: "Verified Profiles",
         description: "Every user goes through a verification process so you can flat-hunt with confidence."
     },
     {
-        icon: <Users className="w-6 h-6 text-indigo-600" />,
+        icon: <Users className="w-6 h-6 text-slate-900" />,
         title: "Community First",
         description: "Join a community of like-minded people looking for shared spaces, not just properties."
     }
@@ -36,7 +36,7 @@ export default function FindFasterSection() {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                     {features.map((feature, index) => (
                         <div key={index} className="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow">
-                            <div className="w-12 h-12 bg-indigo-50 rounded-xl flex items-center justify-center mb-6">
+                            <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center mb-6">
                                 {feature.icon}
                             </div>
                             <h3 className="text-xl font-semibold text-slate-900 mb-3">{feature.title}</h3>

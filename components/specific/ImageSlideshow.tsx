@@ -77,9 +77,9 @@ export default function ImageSlideshow({ images, autoSlideInterval = 4000 }: Ima
 
     const renderImage = (isFull: boolean) => (
         <div
-            className={`relative border-2 border-slate-100 rounded-md ${isFull
+            className={`relative rounded-md ${isFull
                 ? 'h-screen w-screen bg-black'
-                : 'h-[300px] md:h-[500px] w-full bg-slate-100'
+                : 'h-[300px] md:h-[500px] w-full bg-slate-100 border-2 border-slate-100'
                 } overflow-hidden`}
         >
             <AnimatePresence initial={false} custom={direction}>

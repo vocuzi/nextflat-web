@@ -42,7 +42,7 @@ export default function TestimonialsSection() {
                             <p className="text-slate-600 mb-6 flex-grow italic">"{item.content}"</p>
 
                             <div className="flex items-center mt-auto">
-                                <div className="h-10 w-10 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-700 font-bold mr-3">
+                                <div className="h-10 w-10 rounded-full bg-green-100 flex items-center justify-center text-green-800 font-bold mr-3">
                                     {item.avatar}
                                 </div>
                                 <div>

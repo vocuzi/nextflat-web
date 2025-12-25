@@ -1,6 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Facebook, Instagram, Twitter, Linkedin, Smartphone } from "lucide-react";
+import { FaAppStore } from "react-icons/fa6";
+import { FaGooglePlay } from "react-icons/fa6";
 
 export default function Footer() {
   return (
@@ -51,14 +53,14 @@ export default function Footer() {
             <h4 className="font-bold text-slate-900">Get the App</h4>
             <div className="flex flex-col gap-3">
               <button className="flex items-center gap-3 bg-slate-900 text-white px-4 py-2 rounded-lg hover:bg-slate-800 transition-colors text-left w-fit">
-                <Smartphone size={16} />
+                <FaAppStore size={20} />
                 <div className="leading-none">
                   <div className="text-[9px] uppercase font-bold text-slate-400">Download on</div>
                   <div className="text-xs font-bold">App Store</div>
                 </div>
               </button>
               <button className="flex items-center gap-3 bg-slate-100 text-slate-900 border border-slate-200 px-4 py-2 rounded-lg hover:bg-slate-200 transition-colors text-left w-fit">
-                <Smartphone size={16} />
+                <FaGooglePlay size={20} />
                 <div className="leading-none">
                   <div className="text-[9px] uppercase font-bold text-slate-500">Get it on</div>
                   <div className="text-xs font-bold">Google Play</div>
