@@ -19,6 +19,7 @@ import { useState } from 'react';
 import { HiMiniHome } from 'react-icons/hi2';
 import Link from 'next/link';
 // import SeeMoreFlats from './SeeMoreFlatsInLocality';
+import { TbMapShare } from "react-icons/tb";
 
 interface FlatDetails {
     id: number;
@@ -101,21 +102,81 @@ export default function FlatDetailsPage({ flat }: FlatDetailsPageProps) {
             <Header />
 
             <section className="grid grid-cols-1 mx-3">
-                <div className="bg-slate-50 text-slate-900 flex flex-col rounded-lg">
-                    <div className="flex">
-                        <div className="px-4 rounded-md p-2 flex flex-row gap-1 text-slate-500 items-center justify-start text-xs">
-                            <Link href={'/'}><HiMiniHome className="text-slate-800 text-lg" /></Link>
-                            {"/"}
-                            <Link href={`/flats/flats-in-${flat.city.toLowerCase().replace(/\s+/g, '-')}`} className="text-slate-800 text-sm">{flat.city}</Link>
-                            {"/"}
-                            <Link href={`/flats/flats-in-${flat.city.toLowerCase().replace(/\s+/g, '-')}/${flat.locality}`} className="text-slate-800 text-sm">Flats in {flat.locality}</Link>
+                <div className="bg-gray-100 text-slate-900 flex flex-col rounded-lg">
+                    <div className="px-4 py-2">
+                        <div className="flex items-center gap text-slate-300 text-xs truncate overflow-hidden whitespace-nowrap max-w-full">
+                            <Link href="/">
+                                <HiMiniHome className="text-slate-800 text-lg shrink-0" />
+                            </Link>
+
+                            <span className="mx-1">/</span>
+
+                            <Link
+                                href={`/flats/flats-in-${flat.city.toLowerCase().replace(/\s+/g, '-')}`}
+                                className="text-slate-800"
+                            >
+                                {flat.city}
+                            </Link>
+
+                            <span className="mx-1">/</span>
+
+                            <Link
+                                href={`/flats/flats-in-${flat.city.toLowerCase().replace(/\s+/g, '-')}/${flat.locality}`}
+                                className="text-slate-800"
+                            >
+                                {flat.locality}
+                            </Link>
+
+                            <span className="mx-1">/</span>
+
+                            <Link
+                                href={`/post/${flat.id}`}
+                                className="text-slate-800 truncate"
+                            >
+                                {flat.type} for rent in {flat.locality}
+                            </Link>
                         </div>
                     </div>
                 </div>
             </section>
 
+            <section className="flex flex-col md:px-6 md:pt-4 mx-2 mt-4 border-2 border-transparent">
+                <div className='m-2 md:mb-0'>
+                    <div className="flex items-center gap-2 text-slate-500 text-sm font-semibold">
+                        <MapPin size={16} />
+                        <span>{flat.locality}, {flat.city}</span>
+                    </div>
+                    <h1 className="text-2xl md:text-3xl font-bold text-slate-800 leading-tight">
+                        {flat.type} for rent in {flat.locality}
+                    </h1>
+                </div>
+                <div className="flex flex-wrap gap-2 my-2 md:px-0">
+                    {flat.brokerage_applicable === false ? (
+                        <div className="flex items-center gap-1.5 px-2 py-1 rounded-lg bg-green-300 text-slate-800 text-xs font-bold shadow-sm">
+                            <CircleCheck size={16} className="text-slate-900 stroke-[3]" />
+                            <span>No Brokerage</span>
+                        </div>
+                    ) : (
+                        <div className="flex items-center gap-1.5 px-2 py-1 rounded-lg bg-amber-100 text-slate-800 text-xs font-bold border border-amber-200">
+                            <HandCoins size={16} className="text-amber-700 stroke-[3]" />
+                            <span>Brokerage Applicable</span>
+                        </div>
+                    )}
+
+                    <div className={`flex items-center gap-1.5 px-2 py-1 rounded-lg text-xs font-bold border shadow-sm ${flat.available_for === 'Male Only' ? 'bg-blue-50 text-blue-700 border-blue-200' :
+                        flat.available_for === 'Female Only' ? 'bg-pink-50 text-pink-700 border-pink-200' :
+                            flat.available_for === 'Family' ? 'bg-purple-50 text-purple-700 border-purple-200' :
+                                'bg-orange-50 text-orange-700 border-orange-200'
+                        }`}>
+                        <User size={16} />
+                        <span>{flat.available_for}</span>
+                    </div>
+                </div>
+            </section>
+
+
             {/* ---- HERO SECTION ---- */}
-            <section className="flex flex-col md:flex-row md:p-6">
+            <section className="flex flex-col md:flex-row md:p-6 md:pt-3 gap-4 md:px-12">
 
                 {/* LEFT: Images */}
                 <div className="w-full md:w-5/12">
@@ -123,77 +184,42 @@ export default function FlatDetailsPage({ flat }: FlatDetailsPageProps) {
                 </div>
 
                 <div className="w-full md:w-7/12 gap-y-4 flex flex-col p-4 md:px-6">
-
-                    <div className="flex flex-wrap gap-2 md:px-0">
-                        {flat.brokerage_applicable === false ? (
-                            <div className="flex items-center gap-1.5 px-2 py-1 rounded-lg bg-slate-900 text-white text-xs font-bold shadow-sm">
-                                <CircleCheck size={16} className="text-green-300 stroke-[3]" />
-                                <span>No Brokerage</span>
-                            </div>
-                        ) : (
-                            <div className="flex items-center gap-1.5 px-2 py-1 rounded-lg bg-amber-100 text-amber-700 text-xs font-bold border border-amber-200">
-                                <HandCoins size={16} className="text-amber-700 stroke-[3]" />
-                                <span>Brokerage Applicable</span>
-                            </div>
-                        )}
-
-                        <div className={`flex items-center gap-1.5 px-2 py-1 rounded-lg text-xs font-bold border shadow-sm ${flat.available_for === 'Male Only' ? 'bg-blue-50 text-blue-700 border-blue-200' :
-                            flat.available_for === 'Female Only' ? 'bg-pink-50 text-pink-700 border-pink-200' :
-                                flat.available_for === 'Family' ? 'bg-purple-50 text-purple-700 border-purple-200' :
-                                    'bg-orange-50 text-orange-700 border-orange-200'
-                            }`}>
-                            <User size={16} />
-                            <span>{flat.available_for}</span>
-                        </div>
+                    <div className="flex items-center gap-1 text-slate-500 text-sm">
+                        Posted by <b>{flat.additional_info?.user_name || "Owner"}</b>, <b>{flat.posted_at}</b>
                     </div>
-
-                    <div className=''>
-                        <div className="flex items-center gap-2 text-slate-500 text-sm font-semibold">
-                            <MapPin size={16} />
-                            <span>{flat.locality}, {flat.city}</span>
-                        </div>
-                        <h1 className="text-2xl md:text-3xl mt-4 font-bold text-slate-800 leading-tight">
-                            {flat.type} for rent in {flat.locality}
-                        </h1>
-                    </div>
-
-                    {/* Info Tiles */}
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                         {[
-                            { title: "Furnishing", value: flat.furnished || "Unfurnished" },
-                            { title: "Tenant Type", value: flat.available_for },
-                            { title: "Listing Type", value: flat.type },
-                            { title: "Posted", value: flat.posted_at }
+                            { title: "Available for", value: flat.available_for, className: "" },
+                            { title: "Listing Type", value: flat.type, className: "" },
+                            { title: "Posted", value: flat.posted_at, className: "hidden md:block" }
                         ].map((item, idx) => (
                             <div
                                 key={idx}
-                                className="bg-green-50 rounded-md border border-green-100 p-3 text-center"
+                                className={"bg-green-50 rounded-md border border-green-100 p-3 text-center " + item.className}
                             >
                                 <div className="text-xs text-slate-500">{item.title}</div>
                                 <div className="font-semibold text-slate-700 text-md">{item.value}</div>
                             </div>
                         ))}
                     </div>
-
-                    {/* Rent + Deposit + Contact Card (2-column) */}
-                    <div className="grid md:grid-cols-2 gap-6">
-
-                        {/* Pricing */}
-                        <div className="space-y-4 flex flex-row md:flex-col justify-between md:justify-start px-4 pt-4 md:pt-0">
-                            <div>
-                                <div className="text-sm text-slate-500">Rent per month</div>
-                                <div className="text-2xl font-bold text-slate-800">
-                                    {formatCurrency(flat.rent_amount)}
-                                </div>
-                            </div>
-
-                            <div>
-                                <div className="text-sm text-slate-500">Security Deposit</div>
-                                <div className="text-2xl font-bold text-slate-600">
-                                    {formatCurrency(flat.security_amount)}
-                                </div>
+                    <div className="space-y-4 flex flex-row justify-between md:justify-start md:gap-12 px-4 md:pt-0">
+                        <div>
+                            <div className="text-sm text-slate-500">Rent per month</div>
+                            <div className="text-3xl font-bold text-slate-800">
+                                {formatCurrency(flat.rent_amount)}
                             </div>
                         </div>
+
+                        <div>
+                            <div className="text-sm text-slate-500">Security Deposit</div>
+                            <div className="text-3xl md:text-2xl font-bold text-slate-600">
+                                {formatCurrency(flat.security_amount)}
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Rent + Deposit + Contact Card (2-column) */}
+                    <div className="grid gap-6 w-full max-w-lg mx-auto">
 
                         {/* Contact / Owner Card */}
                         <div className="bg-white rounded-md border-2 border-slate-100 p-4 space-y-4">
@@ -230,8 +256,38 @@ export default function FlatDetailsPage({ flat }: FlatDetailsPageProps) {
                                 </button>
                             </div>
                         </div>
-
                     </div>
+
+
+                    {/* AMENITIES */}
+                    {flat.amenities?.length > 0 && (
+                        <div className="bg-white p-4">
+                            <h2 className="text-xl font-bold mb-4 text-slate-900">Amenities</h2>
+                            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                                {flat.amenities.map((item, idx) => (
+                                    <div key={idx} className="flex items-center gap-2 text-slate-700">
+                                        <div className="w-2 h-2 rounded-full bg-green-500" />
+                                        {item}
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+
+                    {/* RESTRICTIONS */}
+                    {flat.restrictions?.length > 0 && (
+                        <div className="bg-white p-4">
+                            <h2 className="text-xl font-bold mb-4 text-slate-900">Restrictions</h2>
+                            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                                {flat.restrictions.map((item, idx) => (
+                                    <div key={idx} className="flex items-center gap-2 text-slate-700">
+                                        <div className="w-2 h-2 rounded-full bg-red-500" />
+                                        {item}
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    )}
                 </div>
             </section>
 
@@ -245,48 +301,31 @@ export default function FlatDetailsPage({ flat }: FlatDetailsPageProps) {
 
                         {/* DESCRIPTION */}
                         <div className="p-4">
-                            <h2 className="text-xl font-bold mb-4 text-slate-900">Description</h2>
+                            <h2 className="text-xl font-bold mb-4 text-slate-900">More Information from Owner</h2>
                             <div className="prose prose-slate max-w-none whitespace-pre-line text-slate-700">
                                 {flat.description}
                             </div>
                         </div>
-
-                        {/* AMENITIES */}
-                        {flat.amenities?.length > 0 && (
-                            <div className="bg-white p-4">
-                                <h2 className="text-xl font-bold mb-4 text-slate-900">Amenities</h2>
-                                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                                    {flat.amenities.map((item, idx) => (
-                                        <div key={idx} className="flex items-center gap-2 text-slate-700">
-                                            <div className="w-2 h-2 rounded-full bg-green-500" />
-                                            {item}
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-                        )}
-
-                        {/* RESTRICTIONS */}
-                        {flat.restrictions?.length > 0 && (
-                            <div className="bg-white p-4">
-                                <h2 className="text-xl font-bold mb-4 text-slate-900">Restrictions</h2>
-                                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                                    {flat.restrictions.map((item, idx) => (
-                                        <div key={idx} className="flex items-center gap-2 text-slate-700">
-                                            <div className="w-2 h-2 rounded-full bg-red-500" />
-                                            {item}
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-                        )}
                     </div>
 
                     {/* Sidebar */}
-                    <div className="space-y-6">
+                    <div className="space-y-6 flex flex-col items-center justify-center">
+
+                        <a
+                            href={`https://www.google.com/maps?q=${flat.latitude},${flat.longitude}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex w-56 justify-center items-center gap-2 px-3 py-2 rounded-lg
+             bg-slate-900 text-white text-sm font-semibold
+             hover:bg-slate-800 transition-colors"
+                        >
+                            <TbMapShare size={26} className='text-green-300' />
+                            <span>Open in Maps</span>
+                        </a>
+
 
                         {/* LOCATION MAP */}
-                        <div className="bg-white rounded-md p-4 shadow-sm border border-slate-100">
+                        <div className="bg-white w-full rounded-md p-4 shadow-sm border border-slate-100">
                             <h3 className="font-bold text-slate-900 mb-3">Explore Locality on Maps</h3>
                             <div className="aspect-square bg-slate-100 rounded-xl flex items-center justify-center relative overflow-hidden">
                                 <iframe
