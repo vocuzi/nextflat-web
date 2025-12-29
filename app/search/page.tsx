@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { Search, MapPin, Building2, Users, Home, TrendingUp, CheckCircle2 } from "lucide-react";
+import { Search, CheckCircle2, MessageCircle, Filter, Map, Sparkles, Users } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import activeCities from "@/data/EnabledFeatures";
@@ -22,11 +22,27 @@ export default function SearchPage() {
         return () => clearInterval(interval);
     }, [words.length]);
 
-    const stats = [
-        { label: "Active Listings", value: "25,000+", icon: <Home className="w-5 h-5 text-emerald-500" /> },
-        { label: "Localities", value: "1,200+", icon: <MapPin className="w-5 h-5 text-blue-500" /> },
-        { label: "Happy Users", value: "100,000+", icon: <Users className="w-5 h-5 text-indigo-500" /> },
-        { label: "Daily New Pails", value: "500+", icon: <TrendingUp className="w-5 h-5 text-orange-500" /> },
+    const features = [
+        {
+            title: "WhatsApp Alerts",
+            description: "Curated listings delivered directly to your WhatsApp instantly.",
+            icon: <MessageCircle className="w-5 h-5 text-emerald-500" />
+        },
+        {
+            title: "Smart Filters",
+            description: "Easy filters for price, locality, gender, brokerage, and more.",
+            icon: <Filter className="w-5 h-5 text-blue-500" />
+        },
+        {
+            title: "Map Discovery",
+            description: "Find your perfect home faster with interactive map search.",
+            icon: <Map className="w-5 h-5 text-indigo-500" />
+        },
+        {
+            title: "Personalized",
+            description: "Get smart recommendations tailored to your unique preferences.",
+            icon: <Sparkles className="w-5 h-5 text-orange-500" />
+        },
     ];
 
     return (
@@ -149,26 +165,6 @@ export default function SearchPage() {
                             </motion.div>
                         ))}
                     </div>
-
-                    <div className="border-t border-slate-200 pt-10 md:pt-12">
-                        <h3 className="text-base md:text-lg font-bold text-slate-900 mb-6 md:mb-8 uppercase tracking-wider text-center md:text-left">Complete list of cities we support</h3>
-                        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-y-3 md:gap-y-4 gap-x-4 md:gap-x-8">
-                            {activeCities.map((city) => (
-                                <Link
-                                    key={city.code}
-                                    href={`/flats/${city.slug}`}
-                                    className="text-slate-600 hover:text-emerald-600 text-sm md:text-base font-medium transition-colors flex items-center gap-2 group"
-                                >
-                                    <div className="w-1.5 h-1.5 rounded-full bg-slate-300 group-hover:bg-emerald-500 transition-colors shrink-0" />
-                                    <span className="truncate">{city.name}</span>
-                                </Link>
-                            ))}
-                            <span className="text-slate-400 text-sm md:text-base font-medium italic flex items-center gap-2">
-                                <div className="w-1.5 h-1.5 rounded-full bg-slate-200 shrink-0" />
-                                More...
-                            </span>
-                        </div>
-                    </div>
                 </div>
             </section>
 
@@ -178,25 +174,25 @@ export default function SearchPage() {
                 <div className="max-w-7xl mx-auto">
                     <div className="text-center mb-12 md:mb-20 max-w-3xl mx-auto">
                         <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight mb-4 md:mb-6 leading-tight">
-                            Redefining the Home Search Experience
+                            Redefining the Flat Hunt Experience
                         </h2>
                         <p className="text-base md:text-lg text-slate-600 leading-relaxed">
-                            We've built NextFlat to be the most transparent and efficient way to find your next home.
+                            We've built NextFlat with powerful features to make your search more transparent, efficient, and tailored to you.
                         </p>
                     </div>
 
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 md:gap-16 items-center">
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6">
-                            {stats.map((stat, i) => (
+                            {features.map((feature, i) => (
                                 <div key={i} className="p-6 md:p-8 rounded-[1.5rem] md:rounded-[2.5rem] bg-white border border-slate-100 shadow-sm hover:shadow-xl transition-all hover:-translate-y-1">
                                     <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl md:rounded-2xl bg-slate-50 flex items-center justify-center mb-4 md:mb-6">
-                                        {stat.icon}
+                                        {feature.icon}
                                     </div>
-                                    <div className="text-2xl md:text-3xl font-bold text-slate-900 tracking-tight">{stat.value}</div>
-                                    <div className="text-xs md:text-sm font-semibold text-slate-400 mt-1 md:mt-2 uppercase tracking-widest">{stat.label}</div>
+                                    <div className="text-xl md:text-2xl font-bold text-slate-900 tracking-tight mb-2">{feature.title}</div>
+                                    <div className="text-sm text-slate-500 leading-relaxed font-medium">{feature.description}</div>
 
                                     <div className="mt-6 pt-6 md:mt-8 md:pt-8 border-t border-slate-50 flex items-center justify-between text-[10px] md:text-xs font-bold text-emerald-600">
-                                        <span>LIVE UPDATES</span>
+                                        <span>ACTIVE FEATURE</span>
                                         <div className="flex gap-1">
                                             {[1, 2, 3].map(j => <div key={j} className="w-1 h-3 bg-emerald-100 rounded-full animate-pulse" style={{ animationDelay: `${j * 0.2}s` }} />)}
                                         </div>
@@ -205,41 +201,70 @@ export default function SearchPage() {
                             ))}
                         </div>
 
-                        <div className="relative mt-8 lg:mt-0">
-                            <div className="aspect-square rounded-full bg-emerald-50 absolute -top-12 -right-12 w-64 h-64 -z-10 blur-2xl opacity-70 animate-pulse hidden md:block" />
-                            <div className="relative rounded-3xl md:rounded-[2.5rem] overflow-hidden border-[6px] md:border-[8px] border-slate-900/5 shadow-2xl">
-                                <div className="bg-slate-900 p-6 md:p-8 text-white">
-                                    <div className="flex items-center gap-2 md:gap-3 mb-6 md:mb-8">
-                                        <div className="w-2.5 h-2.5 rounded-full bg-red-500" />
-                                        <div className="w-2.5 h-2.5 rounded-full bg-yellow-500" />
-                                        <div className="w-2.5 h-2.5 rounded-full bg-green-500" />
+                        <div className="relative mt-8 lg:mt-0 flex justify-center lg:justify-end">
+                            {/* Decorative Background Elements */}
+                            <div className="absolute top-1/2 left-1/2 w-[120%] h-[120%] bg-emerald-50 rounded-md blur-3xl opacity-50 -z-10 animate-pulse" />
+
+                            <motion.div
+                                initial={{ opacity: 0, scale: 0.95 }}
+                                whileInView={{ opacity: 1, scale: 1 }}
+                                transition={{ duration: 0.8, ease: "easeOut" }}
+                                viewport={{ once: true }}
+                                className="relative"
+                            >
+
+                                <div className="relative rounded-[1.6rem] overflow-hidden border-[6px] md:border-[8px] rounded-b-none border-b-1 md:border-b-1 border-b-slate-200 border-slate-800 shadow-[0_50px_100px_-20px_rgba(0,0,0,0.3)]">
+                                    {/* Cropped viewport */}
+                                    <div className="relative w-74 h-[500px] overflow-hidden">
+                                        <Image
+                                            src="/illustrations/app-prev.jpg"
+                                            alt="NextFlat App Screenshot"
+                                            fill
+                                            className="object-cover object-top"
+                                            priority
+                                        />
                                     </div>
-                                    <h4 className="text-lg md:text-xl font-bold mb-4">Market Insights</h4>
-                                    <div className="space-y-3 md:space-y-4">
-                                        <div className="h-1.5 md:h-2 bg-slate-800 rounded-full w-3/4" />
-                                        <div className="h-1.5 md:h-2 bg-slate-800 rounded-full w-1/2" />
-                                        <div className="h-1.5 md:h-2 bg-slate-800 rounded-full w-2/3" />
-                                    </div>
-                                    <div className="mt-8 pt-8 border-t border-slate-800 grid grid-cols-2 gap-4 md:gap-8">
-                                        <div>
-                                            <div className="text-slate-400 text-[10px] md:text-xs mb-1 uppercase tracking-tighter">Growth</div>
-                                            <div className="text-xl md:text-2xl font-bold text-emerald-400">+12%</div>
-                                        </div>
-                                        <div>
-                                            <div className="text-slate-400 text-[10px] md:text-xs mb-1 uppercase tracking-tighter">Trust Score</div>
-                                            <div className="text-xl md:text-2xl font-bold text-blue-400">9.8</div>
+
+                                    {/* Glassmorphism Badge */}
+                                    <div className="absolute bottom-10 left-6 right-6 p-4 rounded-2xl bg-slate-900/10 backdrop-blur-xl border border-slate-900/20 text-slate-900">
+                                        <div className="flex items-center gap-3">
+                                            <div className="w-10 h-10 rounded-full bg-emerald-500 flex items-center justify-center">
+                                                <Sparkles className="w-5 h-5 text-white" />
+                                            </div>
+                                            <div>
+                                                <p className="text-sm font-bold">Smart Search Active</p>
+                                                <p className="text-[10px] text-slate-900/80 uppercase tracking-widest">
+                                                    Powered by NextFlat AI
+                                                </p>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div className="bg-slate-50 p-6 md:p-8 h-48 md:h-64 flex flex-col justify-end">
-                                    <div className="flex gap-1.5 md:gap-2 mb-4">
-                                        {[1, 2, 3, 4, 5, 6].map(i => (
-                                            <div key={i} className="flex-1 bg-emerald-200 rounded-sm" style={{ height: `${20 + (i * 10)}%` }} />
-                                        ))}
+
+
+                                {/* Floating UI Elements for extra depth */}
+                                <motion.div
+                                    animate={{ y: [0, -10, 0] }}
+                                    transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                                    className="absolute -top-6 -right-6 md:-top-10 md:-right-10 p-4 rounded-2xl bg-white shadow-xl border border-slate-100 hidden md:flex items-center gap-3 z-10"
+                                >
+                                    <div className="w-8 h-8 rounded-lg bg-emerald-100 flex items-center justify-center">
+                                        <CheckCircle2 className="w-4 h-4 text-emerald-600" />
                                     </div>
-                                    <p className="text-slate-400 text-xs md:text-sm">New listings volume by locality</p>
-                                </div>
-                            </div>
+                                    <span className="text-sm font-bold text-slate-900">100% Verified</span>
+                                </motion.div>
+
+                                <motion.div
+                                    animate={{ y: [0, 10, 0] }}
+                                    transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+                                    className="absolute -bottom-6 -left-6 md:-bottom-10 md:-left-10 p-4 rounded-2xl bg-white shadow-xl border border-slate-100 hidden md:flex items-center gap-3 z-10"
+                                >
+                                    <div className="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center">
+                                        <Users className="w-4 h-4 text-blue-600" />
+                                    </div>
+                                    <span className="text-sm font-bold text-slate-900">Direct Connect</span>
+                                </motion.div>
+                            </motion.div>
                         </div>
                     </div>
                 </div>
