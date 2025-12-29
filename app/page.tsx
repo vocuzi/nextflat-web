@@ -8,6 +8,98 @@ import AppDownloadCta from "@/components/specific/AppDownloadCta";
 import FindFasterSection from "@/components/specific/FindFasterSection";
 import AlertsSection from "@/components/specific/AlertsSection";
 import TestimonialsSection from "@/components/specific/TestimonialsSection";
+import type { Metadata } from 'next'
+
+
+export const metadata: Metadata = {
+  title: {
+    default: 'NextFlat - Shared Flats, Roommates & PGs without brokerage',
+    template: "%s | NextFlat",
+  },
+
+  description:
+    "Find Shared Flats, PGs & Flatmates without brokerage with our AI-powered platform. Connect directly with tenants and find flatmates, tenants, or shared spaces faster.",
+
+  keywords: [
+    "NextFlat",
+    "flats for rent",
+    "room for rent",
+    "PG near me",
+    "no brokerage flats",
+    "rental homes",
+    "flat for rent in India",
+    "flatmate finder",
+    "roommates",
+    "house for rent",
+    "apartment rental platform",
+    "real estate marketplace",
+    "rent without broker",
+    "find flats online",
+  ],
+
+  authors: [{ name: "NextFlat.in", url: "https://nextflat.in" }],
+  creator: "NextFlat",
+  publisher: "NextFlat",
+
+  applicationName: "NextFlat.in",
+  category: "Real Estate",
+
+  metadataBase: new URL("https://nextflat.in"),
+
+  alternates: {
+    canonical: "https://nextflat.in",
+  },
+
+  openGraph: {
+    title: "NextFlat - Shared Flats, Roommates & PGs without brokerage",
+    description:
+      "Find Shared Flats, PGs & Flatmates without brokerage with our AI-powered platform. Connect directly with tenants and find flatmates, tenants, or shared spaces faster.",
+    url: "https://nextflat.in",
+    siteName: "NextFlat",
+    images: [
+      {
+        url: "https://nextflat.in/og/home.png",
+        width: 1200,
+        height: 630,
+        alt: "NextFlat - Find Flats Without Brokerage",
+      },
+    ],
+    locale: "en_IN",
+    type: "website",
+  },
+
+  twitter: {
+    card: "summary_large_image",
+    title: "NextFlat - Shared Flats, Roommates & PGs without brokerage",
+    description:
+      "Find Shared Flats, PGs & Flatmates without brokerage with our AI-powered platform. Connect directly with tenants and find flatmates, tenants, or shared spaces faster.",
+    images: ["https://nextflat.in/og/home.png"],
+    creator: "@nextflat_in",
+  },
+
+  robots: {
+    index: true,
+    follow: true,
+    nocache: false,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-snippet": -1,
+      "max-image-preview": "large",
+      "max-video-preview": -1,
+    },
+  },
+
+  icons: {
+    icon: "/favicon.ico",
+    shortcut: "/favicon-32x32.png",
+    apple: "/apple-touch-icon.png",
+  },
+
+  manifest: "/site.webmanifest",
+};
+
+
 
 export default function Home() {
   return (

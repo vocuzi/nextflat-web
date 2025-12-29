@@ -1,9 +1,10 @@
 import FlatDetailsPage from '@/components/specific/FlatDetailsPage';
 import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
+import { API_BASE } from '@/lib/constants';
 
 async function getFlatDetails(id: string) {
-    const res = await fetch(`https://v1apinffk.svc.nextflat.in/api/flats/${id}/details`, {
+    const res = await fetch(`${API_BASE}/api/flats/${id}/details`, {
         next: { revalidate: 60 },
     });
 

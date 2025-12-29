@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 import Footer from "@/components/Footer";
-import Header from "@/components/HeaderWithSearch";
+import Header from "@/components/Header";
 import CityFlatsList from "@/components/specific/CityFlatsList";
 import FilterBar, { FilterState } from "@/components/specific/FilterBar";
 import PageMasthead from "@/components/specific/PageMasthead";

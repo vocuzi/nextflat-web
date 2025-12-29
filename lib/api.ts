@@ -1,8 +1,10 @@
 // Centralized API functions for fetching flats data
 
+import { API_BASE } from "./constants";
+
 export async function getFlats(cityCode: string, page = 1) {
   const res = await fetch(
-    `https://v1apinffk.svc.nextflat.in/api/flats/search?city=${cityCode}&state=0&page=${page}`,
+    `${API_BASE}/api/flats/search?city=${cityCode}&state=0&page=${page}`,
     {
       next: { revalidate: 3600 }, // ISR: revalidate every 1 hour
     }
@@ -33,7 +35,7 @@ export interface PageMetadata {
 export async function getPageMetadata(citySlug: string): Promise<PageMetadata | null> {
   try {
     const res = await fetch(
-      `https://v1apinffk.svc.nextflat.in/api/page/${citySlug}`,
+      `${API_BASE}/api/page/${citySlug}`,
       {
         next: { revalidate: 3600 }, // ISR: revalidate every 1 hour
       }

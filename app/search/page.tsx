@@ -1,0 +1,252 @@
+'use client';
+
+import { useState, useEffect } from 'react';
+import Image from "next/image";
+import Link from "next/link";
+import { motion, AnimatePresence } from "framer-motion";
+import { Search, MapPin, Building2, Users, Home, TrendingUp, CheckCircle2 } from "lucide-react";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
+import activeCities from "@/data/EnabledFeatures";
+import SearchModal from "@/components/specific/SearchModal";
+
+export default function SearchPage() {
+    const [isSearchOpen, setIsSearchOpen] = useState(false);
+    const words = ["Flats", "Flatmates", "PGs", "Localities", "Societies"];
+    const [index, setIndex] = useState(0);
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setIndex((prev) => (prev + 1) % words.length);
+        }, 2500);
+        return () => clearInterval(interval);
+    }, [words.length]);
+
+    const stats = [
+        { label: "Active Listings", value: "25,000+", icon: <Home className="w-5 h-5 text-emerald-500" /> },
+        { label: "Localities", value: "1,200+", icon: <MapPin className="w-5 h-5 text-blue-500" /> },
+        { label: "Happy Users", value: "100,000+", icon: <Users className="w-5 h-5 text-indigo-500" /> },
+        { label: "Daily New Pails", value: "500+", icon: <TrendingUp className="w-5 h-5 text-orange-500" /> },
+    ];
+
+    return (
+        <div className="min-h-screen bg-white">
+            <Header />
+
+            {/* Masthead */}
+            <section className="relative pt-12 pb-16 md:pt-16 md:pb-24 px-4 md:px-6 overflow-hidden">
+                {/* Abstract Background Decorations */}
+                {/* <div className="absolute top-[-20%] right-[-10%] w-[500px] h-[500px] bg-emerald-50 rounded-full blur-3xl z-1 opacity-20" /> */}
+                <div className="pointer-events-none absolute top-[-200px] right-[-200px] w-[700px] h-[700px] rounded-full 
+    bg-[radial-gradient(circle_at_center,_rgba(16,185,129,0.35)_0%,_rgba(16,185,129,0.15)_35%,_transparent_70%)]
+    blur-3xl z-0 opacity-40">
+                </div>
+
+                <div className="max-w-4xl mx-auto flex flex-col items-center text-center">
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5 }}
+                        className="mb-6 inline-flex items-center gap-2 px-3 py-1 md:px-4 md:py-1.5 rounded-full bg-emerald-50 border border-emerald-100/50 text-emerald-700 text-xs md:text-sm font-medium"
+                    >
+                        <span className="relative flex h-2 w-2">
+                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                            <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                        </span>
+                        Real-time verified listings
+                    </motion.div>
+
+                    <h1 className="text-3xl sm:text-4xl md:text-6xl font-extrabold text-slate-900 tracking-tight leading-[1.15] mb-6 md:mb-8">
+                        <span className="block text-slate-400 font-semibold text-xl md:text-3xl mb-2">Search for your perfect</span>
+                        <div className="h-[1.2em] text-4xl inline-flex items-center justify-center min-w-[200px] md:min-w-[300px]">
+                            <AnimatePresence mode="wait">
+                                <motion.span
+                                    key={words[index]}
+                                    initial={{ y: 20, opacity: 0 }}
+                                    animate={{ y: 0, opacity: 1 }}
+                                    exit={{ y: -20, opacity: 0 }}
+                                    transition={{ duration: 0.4, ease: [0.23, 1, 0.32, 1] }}
+                                    className="bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent"
+                                >
+                                    {words[index]}
+                                </motion.span>
+                            </AnimatePresence>
+                        </div>
+                    </h1>
+
+                    <p className="text-base md:text-lg text-slate-600 mb-8 md:mb-10 max-w-2xl leading-relaxed">
+                        Discover verified properties and housemates without the brokerage.
+                        Tailored searches for the modern urban dweller.
+                    </p>
+
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ delay: 0.2, duration: 0.5 }}
+                        className="w-full max-w-2xl px-2 md:px-0"
+                    >
+                        <button
+                            onClick={() => setIsSearchOpen(true)}
+                            className="w-full flex items-center gap-3 md:gap-4 bg-white border border-slate-200 p-1.5 pl-4 md:p-2 md:pl-6 rounded-2xl shadow-lg hover:shadow-xl hover:border-emerald-300 transition-all group"
+                        >
+                            <Search className="w-5 h-5 text-slate-400 group-hover:text-emerald-500 transition-colors shrink-0" />
+                            <span className="flex-1 text-left text-slate-500 font-medium text-sm md:text-base truncate">Search by city, locality...</span>
+                            <div className="bg-slate-900 text-white px-4 py-2.5 md:px-6 md:py-3 rounded-xl font-semibold text-xs md:text-sm group-hover:bg-emerald-600 transition-colors whitespace-nowrap">
+                                Explore
+                                <span className="hidden md:inline"> Now</span>
+                            </div>
+                        </button>
+                    </motion.div>
+
+                    <div className="mt-8 flex flex-wrap justify-center gap-x-6 gap-y-3 text-xs md:text-sm text-slate-400 font-medium">
+                        <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-emerald-500" /> Zero Brokerage</span>
+                        <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-emerald-500" /> Verified Photos</span>
+                        <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-emerald-500" /> Direct Owners</span>
+                    </div>
+                </div>
+            </section>
+
+            {/* Cities Section */}
+            <section className="py-12 md:py-20 px-4 md:px-6 bg-slate-50/50">
+                <div className="max-w-7xl mx-auto">
+                    <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 md:mb-12 gap-4">
+                        <div className="text-center md:text-left">
+                            <h2 className="text-2xl md:text-3xl font-bold text-slate-900 tracking-tight">Browse Flats by City</h2>
+                            <p className="text-slate-500 mt-2 text-sm md:text-base">Find homes in top metropolitan areas</p>
+                        </div>
+                    </div>
+
+                    <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 mb-16 md:mb-20">
+                        {activeCities.map((city, idx) => (
+                            <motion.div
+                                key={city.code}
+                                initial={{ opacity: 0, y: 20 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                transition={{ delay: idx * 0.1 }}
+                                viewport={{ once: true }}
+                            >
+                                <Link
+                                    href={`/flats/${city.slug}`}
+                                    className="group relative block aspect-[16/10] sm:aspect-[4/3] md:aspect-[16/10] overflow-hidden rounded-2xl md:rounded-3xl bg-slate-200"
+                                >
+                                    <Image
+                                        src={city.img}
+                                        alt={city.name}
+                                        fill
+                                        className="object-cover transition-transform duration-700 group-hover:scale-110"
+                                    />
+                                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/60 to-transparent" />
+                                    <div className="absolute bottom-4 left-4 right-4 md:bottom-6 md:left-6 md:right-6">
+                                        <h3 className="text-xl md:text-2xl font-bold text-white mb-0.5 md:mb-1">{city.name}</h3>
+                                        <div className="flex items-center justify-between">
+                                            <p className="text-white/80 text-xs md:text-sm font-medium">{city.count} listings available</p>
+                                            <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center text-white md:opacity-0 md:-translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all">
+                                                <Search className="w-4 h-4 md:w-5 md:h-5" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </Link>
+                            </motion.div>
+                        ))}
+                    </div>
+
+                    <div className="border-t border-slate-200 pt-10 md:pt-12">
+                        <h3 className="text-base md:text-lg font-bold text-slate-900 mb-6 md:mb-8 uppercase tracking-wider text-center md:text-left">Complete list of cities we support</h3>
+                        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-y-3 md:gap-y-4 gap-x-4 md:gap-x-8">
+                            {activeCities.map((city) => (
+                                <Link
+                                    key={city.code}
+                                    href={`/flats/${city.slug}`}
+                                    className="text-slate-600 hover:text-emerald-600 text-sm md:text-base font-medium transition-colors flex items-center gap-2 group"
+                                >
+                                    <div className="w-1.5 h-1.5 rounded-full bg-slate-300 group-hover:bg-emerald-500 transition-colors shrink-0" />
+                                    <span className="truncate">{city.name}</span>
+                                </Link>
+                            ))}
+                            <span className="text-slate-400 text-sm md:text-base font-medium italic flex items-center gap-2">
+                                <div className="w-1.5 h-1.5 rounded-full bg-slate-200 shrink-0" />
+                                More...
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* Stats Section */}
+            <section className="py-16 md:py-24 px-4 md:px-6 relative overflow-hidden">
+                <div className="absolute top-1/2 left-0 w-full h-[1px] bg-slate-100 -z-10" />
+                <div className="max-w-7xl mx-auto">
+                    <div className="text-center mb-12 md:mb-20 max-w-3xl mx-auto">
+                        <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight mb-4 md:mb-6 leading-tight">
+                            Redefining the Home Search Experience
+                        </h2>
+                        <p className="text-base md:text-lg text-slate-600 leading-relaxed">
+                            We've built NextFlat to be the most transparent and efficient way to find your next home.
+                        </p>
+                    </div>
+
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 md:gap-16 items-center">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6">
+                            {stats.map((stat, i) => (
+                                <div key={i} className="p-6 md:p-8 rounded-[1.5rem] md:rounded-[2.5rem] bg-white border border-slate-100 shadow-sm hover:shadow-xl transition-all hover:-translate-y-1">
+                                    <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl md:rounded-2xl bg-slate-50 flex items-center justify-center mb-4 md:mb-6">
+                                        {stat.icon}
+                                    </div>
+                                    <div className="text-2xl md:text-3xl font-bold text-slate-900 tracking-tight">{stat.value}</div>
+                                    <div className="text-xs md:text-sm font-semibold text-slate-400 mt-1 md:mt-2 uppercase tracking-widest">{stat.label}</div>
+
+                                    <div className="mt-6 pt-6 md:mt-8 md:pt-8 border-t border-slate-50 flex items-center justify-between text-[10px] md:text-xs font-bold text-emerald-600">
+                                        <span>LIVE UPDATES</span>
+                                        <div className="flex gap-1">
+                                            {[1, 2, 3].map(j => <div key={j} className="w-1 h-3 bg-emerald-100 rounded-full animate-pulse" style={{ animationDelay: `${j * 0.2}s` }} />)}
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+
+                        <div className="relative mt-8 lg:mt-0">
+                            <div className="aspect-square rounded-full bg-emerald-50 absolute -top-12 -right-12 w-64 h-64 -z-10 blur-2xl opacity-70 animate-pulse hidden md:block" />
+                            <div className="relative rounded-3xl md:rounded-[2.5rem] overflow-hidden border-[6px] md:border-[8px] border-slate-900/5 shadow-2xl">
+                                <div className="bg-slate-900 p-6 md:p-8 text-white">
+                                    <div className="flex items-center gap-2 md:gap-3 mb-6 md:mb-8">
+                                        <div className="w-2.5 h-2.5 rounded-full bg-red-500" />
+                                        <div className="w-2.5 h-2.5 rounded-full bg-yellow-500" />
+                                        <div className="w-2.5 h-2.5 rounded-full bg-green-500" />
+                                    </div>
+                                    <h4 className="text-lg md:text-xl font-bold mb-4">Market Insights</h4>
+                                    <div className="space-y-3 md:space-y-4">
+                                        <div className="h-1.5 md:h-2 bg-slate-800 rounded-full w-3/4" />
+                                        <div className="h-1.5 md:h-2 bg-slate-800 rounded-full w-1/2" />
+                                        <div className="h-1.5 md:h-2 bg-slate-800 rounded-full w-2/3" />
+                                    </div>
+                                    <div className="mt-8 pt-8 border-t border-slate-800 grid grid-cols-2 gap-4 md:gap-8">
+                                        <div>
+                                            <div className="text-slate-400 text-[10px] md:text-xs mb-1 uppercase tracking-tighter">Growth</div>
+                                            <div className="text-xl md:text-2xl font-bold text-emerald-400">+12%</div>
+                                        </div>
+                                        <div>
+                                            <div className="text-slate-400 text-[10px] md:text-xs mb-1 uppercase tracking-tighter">Trust Score</div>
+                                            <div className="text-xl md:text-2xl font-bold text-blue-400">9.8</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="bg-slate-50 p-6 md:p-8 h-48 md:h-64 flex flex-col justify-end">
+                                    <div className="flex gap-1.5 md:gap-2 mb-4">
+                                        {[1, 2, 3, 4, 5, 6].map(i => (
+                                            <div key={i} className="flex-1 bg-emerald-200 rounded-sm" style={{ height: `${20 + (i * 10)}%` }} />
+                                        ))}
+                                    </div>
+                                    <p className="text-slate-400 text-xs md:text-sm">New listings volume by locality</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <Footer />
+            <SearchModal open={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
+        </div>
+    );
+}

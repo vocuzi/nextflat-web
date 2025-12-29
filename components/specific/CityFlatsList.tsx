@@ -73,7 +73,7 @@ const FlatCard = ({ item }: { item: Flat }) => {
       {/* Image */}
       <div className="relative h-48 w-full overflow-hidden">
         <img
-          src={"https://v1apinffk.svc.nextflat.in/api" + item.image.replace("_lg.webp", "_sm.webp")}
+          src={"https://v1apinffk.svc.nextflat.in/api" + item.image}
           alt=""
           className="h-full w-full object-cover"
         />
@@ -138,3 +138,6 @@ export default function CityFlatsList({ flats }: { flats: any[] }) {
     </div>
   );
 }
+
+
+export { FlatCard }

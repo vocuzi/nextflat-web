@@ -1,3 +1,4 @@
+import { API_BASE } from '@/lib/constants';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(request: NextRequest) {
@@ -54,7 +55,7 @@ export async function GET(request: NextRequest) {
     }
 
     const res = await fetch(
-      `https://v1apinffk.svc.nextflat.in/api/flats/search?${apiParams.toString()}`,
+      `${API_BASE}/api/flats/search?${apiParams.toString()}`,
       {
         next: { revalidate: 3600 },
       }

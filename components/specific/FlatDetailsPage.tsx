@@ -12,14 +12,16 @@ import {
 } from 'lucide-react';
 
 import ImageSlideshow from './ImageSlideshow';
-import Header from "@/components/HeaderWithSearch";
+import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import AppOnlyFeatureModal from "@/components/modals/AppOnlyFeatureModal";
+import NearbyLocalitiesSection from './NearbyLocalitiesSection';
 import { useState } from 'react';
 import { HiMiniHome } from 'react-icons/hi2';
 import Link from 'next/link';
 // import SeeMoreFlats from './SeeMoreFlatsInLocality';
 import { TbMapShare } from "react-icons/tb";
+import SeeMoreFlats from './SeeMoreFlatsInLocality';
 
 interface FlatDetails {
     id: number;
@@ -377,6 +379,21 @@ export default function FlatDetailsPage({ flat }: FlatDetailsPageProps) {
                 excludeId={flat.id}
                 locationSlug={flat.location_slug}
             /> */}
+
+            {/* Nearby Flats Section */}
+            <SeeMoreFlats
+                localityName={flat.locality}
+                cityCode={"PNQ"}
+                excludeId={99999}
+                locationSlug={flat.city}
+            />
+
+            {/* Nearby Localities Section */}
+            <NearbyLocalitiesSection
+                flatId={flat.id}
+                locality={flat.locality}
+                city={flat.city}
+            />
 
             <Footer />
         </div>

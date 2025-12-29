@@ -5,6 +5,7 @@ import { X, Check, Search, Loader2 } from 'lucide-react';
 import { Switch } from "../ui/switch";
 import { Label } from "../ui/label";
 import { motion, AnimatePresence } from 'framer-motion';
+import { API_BASE } from '@/lib/constants';
 
 export interface FilterOptions {
     localities: string[];
@@ -50,7 +51,7 @@ export default function FilterModal({ isOpen, onClose, currentFilters, onApply, 
     const fetchOptions = async () => {
         setLoading(true);
         try {
-            const response = await fetch(`https://v1apinffk.svc.nextflat.in/api/flats/search/filters?city=${cityCode}&state=x`);
+            const response = await fetch(`${API_BASE}/api/flats/search/filters?city=${cityCode}&state=x`);
             const data = await response.json();
             setOptions(data);
         } catch (error) {
