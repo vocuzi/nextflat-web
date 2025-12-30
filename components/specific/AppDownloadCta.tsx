@@ -3,6 +3,7 @@ import { Smartphone, Download } from "lucide-react";
 import { NfBtn } from "../generic/buttons/Btn";
 import { FaAppStore } from "react-icons/fa6";
 import { FaGooglePlay } from "react-icons/fa6";
+import AppPreview from "./AppPreview";
 
 export default function AppDownloadCta() {
     return (
@@ -14,7 +15,7 @@ export default function AppDownloadCta() {
                         <span>Available on iOS & Android</span>
                     </div>
                     <h2 className="text-3xl md:text-5xl font-bold tracking-tight">
-                        Get the full <span className="text-slate-400">NextFlat</span> experience.
+                        Get the full <span className="text-green-300">NextFlat</span> experience.
                     </h2>
                     <p className="text-slate-400 text-lg max-w-lg mx-auto md:mx-0">
                         Real-time chat, instant alerts, and smoother browsing. Verified flats are just a tap away.
@@ -38,15 +39,7 @@ export default function AppDownloadCta() {
                 </div>
 
                 {/* Mockup area - simplified for now */}
-                <div className="flex-1 flex justify-center items-center relative">
-                    <div className="w-64 h-96 bg-slate-800 rounded-[2.5rem] border-8 border-slate-700 shadow-2xl flex flex-col items-center justify-center p-6 relative">
-                        <div className="absolute top-0 w-32 h-6 bg-slate-700 rounded-b-xl"></div>
-                        <h3 className="text-slate-500 font-bold mb-2">NextFlat App</h3>
-                        <div className="w-full h-32 bg-slate-700/50 rounded-lg mb-4"></div>
-                        <div className="w-full h-16 bg-slate-700/30 rounded-lg mb-2"></div>
-                        <div className="w-full h-16 bg-slate-700/30 rounded-lg"></div>
-                    </div>
-                </div>
+                <AppPreview />
             </div>
         </section>
     );

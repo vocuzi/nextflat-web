@@ -19,17 +19,21 @@ interface CityListingPageProps {
     };
     page: number;
     pageMetadata: PageMetadata | null;
+    initialData: any;
 }
 
-export default function CityListingPage({ city, page, pageMetadata }: CityListingPageProps) {
+export default function CityListingPage({ city, page, pageMetadata, initialData }: CityListingPageProps) {
     const router = useRouter();
     const pathname = usePathname();
     const searchParams = useSearchParams();
 
-    const [data, setData] = useState<any>(null);
-    const [loading, setLoading] = useState(true);
+    const [data, setData] = useState<any>(initialData);
 
-    // Initialize filters from URL search params
+    // Sync with initialData when it changes (server-side update)
+    useEffect(() => {
+        setData(initialData);
+    }, [initialData]);
+
     // Initialize filters from URL search params
     const [filters, setFilters] = useState<FilterState>(() => {
         const genderParam = searchParams.get('gender');
@@ -53,8 +57,6 @@ export default function CityListingPage({ city, page, pageMetadata }: CityListin
     useEffect(() => {
         const newParams = new URLSearchParams();
 
-        // Build newParams based on filters
-        // Build newParams based on filters
         if (filters.genderFilter !== 'all') {
             newParams.set('gender', filters.genderFilter);
         }
@@ -73,63 +75,11 @@ export default function CityListingPage({ city, page, pageMetadata }: CityListin
 
         // Only update if the query string has actually changed
         if (newQueryString !== currentQueryString) {
+            // Use the base city path for the URL
             const newUrl = newQueryString ? `${pathname}?${newQueryString}` : pathname;
             router.replace(newUrl, { scroll: false });
         }
     }, [filters, pathname, router, searchParams]);
-
-    useEffect(() => {
-        const fetchFlats = async () => {
-            setLoading(true);
-            try {
-                // Build query parameters
-                const params = new URLSearchParams({
-                    city: city.code,
-                    page: page.toString(),
-                    state: '0',
-                });
-
-                // Add filter parameters
-                // Add filter parameters
-                if (filters.brokerageFree) {
-                    params.append('brokerage_applicable', 'false');
-                }
-
-                // Add gender filter using flairs parameter (legacy support)
-                if (filters.genderFilter === 'male') {
-                    params.append('flairs', 'Male Only');
-                } else if (filters.genderFilter === 'female') {
-                    params.append('flairs', 'Female Only');
-                }
-
-                // New filters
-                filters.localities.forEach(l => params.append('localities', l));
-                filters.flatTypes.forEach(t => params.append('flat_types', t));
-                if (filters.withPhotos) {
-                    params.append('images_available', 'true');
-                }
-                filters.allowedTenants.forEach(t => {
-                    // Avoid duplicating if gender filter already added it
-                    if ((t === 'Male Only' && filters.genderFilter === 'male') ||
-                        (t === 'Female Only' && filters.genderFilter === 'female')) {
-                        return;
-                    }
-                    params.append('allowed_tenant', t);
-                });
-
-                const response = await fetch(`/api/flats?${params.toString()}`);
-                const result = await response.json();
-                setData(result);
-            } catch (error) {
-                console.error('Error fetching flats:', error);
-                setData({ results: [] });
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchFlats();
-    }, [city.code, page, filters]);
 
     // Use actual pagination data from API response
     const pagination = data?.pagination;
@@ -138,6 +88,7 @@ export default function CityListingPage({ city, page, pageMetadata }: CityListin
     const hasPrevious = pagination?.has_previous || false;
     const totalCount = pagination?.total_count || 0;
     const hasResults = data?.results && data.results.length > 0;
+
 
     // Helper function to build pagination URL with current filters
     const buildPaginationUrl = (pageNum: number) => {
@@ -213,108 +164,98 @@ export default function CityListingPage({ city, page, pageMetadata }: CityListin
                 onFilterChange={setFilters}
             />
 
-            {/* Loading State */}
-            {loading ? (
-                <div className="flex items-center justify-center min-h-[400px]">
-                    <div className="text-center">
-                        <div className="inline-block h-12 w-12 animate-spin rounded-full border-4 border-solid border-slate-900 border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"></div>
-                        <p className="mt-4 text-slate-600">Loading flats...</p>
+            {/* Results List */}
+            <CityFlatsList flats={data?.results || []} />
+
+            {/* Mobile-friendly Pagination */}
+            <div className="my-10 px-3 flex flex-col items-center gap-3">
+                {/* Top info for mobile */}
+                <p className="text-xs sm:hidden text-slate-600">
+                    Page{" "}
+                    <span className="font-semibold text-slate-900">{page}</span> of{" "}
+                    <span className="font-semibold text-slate-900">
+                        {totalPages}
+                    </span>
+                </p>
+
+                <div className="w-full flex flex-col sm:flex-row sm:items-center sm:justify-center gap-2">
+                    {/* Previous Button */}
+                    {hasPrevious ? (
+                        <Link
+                            href={buildPaginationUrl(page - 1)}
+                            className="w-full sm:w-auto text-center px-4 py-2.5 bg-slate-100 border border-slate-300 rounded-lg hover:bg-slate-200 transition-colors font-medium text-slate-700 text-sm sm:text-base"
+                        >
+                            ← Previous
+                        </Link>
+                    ) : (
+                        <span className="w-full sm:w-auto text-center px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-slate-400 cursor-not-allowed font-medium text-sm sm:text-base">
+                            ← Previous
+                        </span>
+                    )}
+
+                    {/* Page Numbers – hidden on very small screens */}
+                    <div className="hidden sm:flex items-center gap-1 mx-2 max-w-full overflow-x-auto scrollbar-none">
+                        {pageNumbers.map((pageNum, index) => {
+                            if (pageNum === "...") {
+                                return (
+                                    <span
+                                        key={`ellipsis-${index}`}
+                                        className="px-3 py-2 text-slate-500"
+                                    >
+                                        ...
+                                    </span>
+                                );
+                            }
+
+                            const isCurrentPage = pageNum === page;
+                            const pageNumber = pageNum as number;
+
+                            return (
+                                <Link
+                                    key={pageNumber}
+                                    href={buildPaginationUrl(pageNumber)}
+                                    className={`
+            min-w-[40px] px-3 py-2 text-center rounded-lg font-medium transition-all text-sm
+            ${isCurrentPage
+                                            ? "bg-slate-900 text-white shadow-md"
+                                            : "bg-white border border-slate-300 text-slate-700 hover:bg-slate-100 hover:border-slate-400"
+                                        }
+          `}
+                                >
+                                    {pageNumber}
+                                </Link>
+                            );
+                        })}
                     </div>
+
+                    {/* Next Button */}
+                    {hasNext ? (
+                        <Link
+                            href={buildPaginationUrl(page + 1)}
+                            className="w-full sm:w-auto text-center px-4 py-2.5 bg-slate-900 text-white rounded-lg hover:bg-slate-800 transition-colors font-medium shadow-sm text-sm sm:text-base"
+                        >
+                            Next →
+                        </Link>
+                    ) : (
+                        <span className="w-full sm:w-auto text-center px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-slate-400 cursor-not-allowed font-medium text-sm sm:text-base">
+                            Next →
+                        </span>
+                    )}
                 </div>
-            ) : (
-                <>
-                    <CityFlatsList flats={data?.results || []} />
 
-                    {/* Mobile-friendly Pagination */}
-                    <div className="my-10 px-3 flex flex-col items-center gap-3">
-                        {/* Top info for mobile */}
-                        <p className="text-xs sm:hidden text-slate-600">
-                            Page{" "}
-                            <span className="font-semibold text-slate-900">{page}</span> of{" "}
-                            <span className="font-semibold text-slate-900">
-                                {totalPages}
-                            </span>
-                        </p>
+                {/* Desktop page info */}
+                <p className="hidden sm:block text-sm text-slate-600">
+                    Page{" "}
+                    <span className="font-semibold text-slate-900">{page}</span> of{" "}
+                    <span className="font-semibold text-slate-900">
+                        {totalPages}
+                    </span>
+                    {totalCount > 0 && (
+                        <span className="text-slate-500 ml-2">({totalCount.toLocaleString()} flats)</span>
+                    )}
+                </p>
+            </div>
 
-                        <div className="w-full flex flex-col sm:flex-row sm:items-center sm:justify-center gap-2">
-                            {/* Previous Button */}
-                            {hasPrevious ? (
-                                <Link
-                                    href={buildPaginationUrl(page - 1)}
-                                    className="w-full sm:w-auto text-center px-4 py-2.5 bg-slate-100 border border-slate-300 rounded-lg hover:bg-slate-200 transition-colors font-medium text-slate-700 text-sm sm:text-base"
-                                >
-                                    ← Previous
-                                </Link>
-                            ) : (
-                                <span className="w-full sm:w-auto text-center px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-slate-400 cursor-not-allowed font-medium text-sm sm:text-base">
-                                    ← Previous
-                                </span>
-                            )}
-
-                            {/* Page Numbers – hidden on very small screens */}
-                            <div className="hidden sm:flex items-center gap-1 mx-2 max-w-full overflow-x-auto scrollbar-none">
-                                {pageNumbers.map((pageNum, index) => {
-                                    if (pageNum === "...") {
-                                        return (
-                                            <span
-                                                key={`ellipsis-${index}`}
-                                                className="px-3 py-2 text-slate-500"
-                                            >
-                                                ...
-                                            </span>
-                                        );
-                                    }
-
-                                    const isCurrentPage = pageNum === page;
-                                    const pageNumber = pageNum as number;
-
-                                    return (
-                                        <Link
-                                            key={pageNumber}
-                                            href={buildPaginationUrl(pageNumber)}
-                                            className={`
-                    min-w-[40px] px-3 py-2 text-center rounded-lg font-medium transition-all text-sm
-                    ${isCurrentPage
-                                                    ? "bg-slate-900 text-white shadow-md"
-                                                    : "bg-white border border-slate-300 text-slate-700 hover:bg-slate-100 hover:border-slate-400"
-                                                }
-                  `}
-                                        >
-                                            {pageNumber}
-                                        </Link>
-                                    );
-                                })}
-                            </div>
-
-                            {/* Next Button */}
-                            {hasNext ? (
-                                <Link
-                                    href={buildPaginationUrl(page + 1)}
-                                    className="w-full sm:w-auto text-center px-4 py-2.5 bg-slate-900 text-white rounded-lg hover:bg-slate-800 transition-colors font-medium shadow-sm text-sm sm:text-base"
-                                >
-                                    Next →
-                                </Link>
-                            ) : (
-                                <span className="w-full sm:w-auto text-center px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-slate-400 cursor-not-allowed font-medium text-sm sm:text-base">
-                                    Next →
-                                </span>
-                            )}
-                        </div>
-
-                        {/* Desktop page info */}
-                        <p className="hidden sm:block text-sm text-slate-600">
-                            Page{" "}
-                            <span className="font-semibold text-slate-900">{page}</span> of{" "}
-                            <span className="font-semibold text-slate-900">
-                                {totalPages}
-                            </span>
-                            {totalCount > 0 && (
-                                <span className="text-slate-500 ml-2">({totalCount.toLocaleString()} flats)</span>
-                            )}
-                        </p>
-                    </div>``
-                </>
-            )}
 
             <SEOTextTemplate
                 city={city.name}

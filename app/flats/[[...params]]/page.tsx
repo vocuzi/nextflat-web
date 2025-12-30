@@ -2,7 +2,7 @@ export const revalidate = 3600; // regenerate every 1 hour
 
 import CityListingPage from "@/components/specific/CityListingPage";
 import activeCities from "@/data/EnabledFeatures";
-import { getPageMetadata } from "@/lib/api";
+import { getPageMetadata, searchFlats, SearchFilters } from "@/lib/api";
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
 
@@ -31,7 +31,7 @@ export function generateStaticParams() {
 export async function generateMetadata({
     params,
 }: {
-    params: { params?: string[] };
+    params: Promise<{ params?: string[] }>;
 }): Promise<Metadata> {
     const resolvedParams = await params;
     const urlParams = resolvedParams.params || [];
@@ -73,15 +73,16 @@ export async function generateMetadata({
 // UNIFIED PAGE COMPONENT - Handles all routes
 export default async function UnifiedCityPage({
     params,
+    searchParams,
 }: {
-    params: { params?: string[] };
+    params: Promise<{ params?: string[] }>;
+    searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
     const resolvedParams = await params;
+    const resolvedSearchParams = await searchParams;
     const urlParams = resolvedParams.params || [];
 
     // Extract slug and page from URL params
-    // /flats/flats-in-pune -> params = ['flats-in-pune']
-    // /flats/flats-in-pune/2 -> params = ['flats-in-pune', '2']
     const slug = urlParams[0];
     const pageParam = urlParams[1];
 
@@ -106,9 +107,54 @@ export default async function UnifiedCityPage({
     }
 
     // Fetch page metadata from API
-    // Extract the city name from slug (e.g., 'flats-in-pune' -> 'pune')
     const cityNameForApi = slug.replace('flats-in-', '');
     const pageMetadata = await getPageMetadata(cityNameForApi);
 
-    return <CityListingPage city={city} page={page} pageMetadata={pageMetadata} />;
+    // Build Search Filters from query params
+    const gender = resolvedSearchParams.gender as string;
+    const brokerage = resolvedSearchParams.brokerage as string;
+
+    // Ensure localities and flatTypes are arrays
+    const localities = Array.isArray(resolvedSearchParams.locality)
+        ? resolvedSearchParams.locality
+        : (resolvedSearchParams.locality ? [resolvedSearchParams.locality as string] : []);
+
+    const flatTypes = Array.isArray(resolvedSearchParams.flat_type)
+        ? resolvedSearchParams.flat_type
+        : (resolvedSearchParams.flat_type ? [resolvedSearchParams.flat_type as string] : []);
+
+    const photos = resolvedSearchParams.photos === 'true';
+
+    const tenants = Array.isArray(resolvedSearchParams.tenant)
+        ? resolvedSearchParams.tenant
+        : (resolvedSearchParams.tenant ? [resolvedSearchParams.tenant as string] : []);
+
+    const searchFilters: SearchFilters = {
+        city: city.code,
+        page: page,
+        state: '0',
+        brokerage_applicable: brokerage === 'free' ? 'false' : undefined,
+        images_available: photos ? 'true' : undefined,
+        localities: localities,
+        flat_types: flatTypes,
+        allowed_tenant: tenants,
+    };
+
+    if (gender === 'male') {
+        searchFilters.flairs = ['Male Only'];
+    } else if (gender === 'female') {
+        searchFilters.flairs = ['Female Only'];
+    }
+
+    // Fetch initial data for SSR
+    const initialData = await searchFlats(searchFilters);
+
+    return (
+        <CityListingPage
+            city={city}
+            page={page}
+            pageMetadata={pageMetadata}
+            initialData={initialData}
+        />
+    );
 }
