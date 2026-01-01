@@ -42,6 +42,8 @@ export default function CityListingPage({ city, page, pageMetadata, initialData 
         const flatTypes = searchParams.getAll('flat_type');
         const withPhotos = searchParams.get('photos') === 'true';
         const allowedTenants = searchParams.getAll('tenant');
+        const minRent = parseInt(searchParams.get('min_rent') || '1000');
+        const maxRent = parseInt(searchParams.get('max_rent') || '75000');
 
         return {
             genderFilter: (genderParam === 'male' || genderParam === 'female') ? genderParam : 'all',
@@ -50,6 +52,8 @@ export default function CityListingPage({ city, page, pageMetadata, initialData 
             flatTypes: flatTypes || [],
             withPhotos: withPhotos,
             allowedTenants: allowedTenants || [],
+            minRent: isNaN(minRent) ? 1000 : minRent,
+            maxRent: isNaN(maxRent) ? 75000 : maxRent,
         };
     });
 
@@ -69,6 +73,12 @@ export default function CityListingPage({ city, page, pageMetadata, initialData 
             newParams.set('photos', 'true');
         }
         filters.allowedTenants.forEach(t => newParams.append('tenant', t));
+        if (filters.minRent > 1000) {
+            newParams.set('min_rent', filters.minRent.toString());
+        }
+        if (filters.maxRent < 75000) {
+            newParams.set('max_rent', filters.maxRent.toString());
+        }
 
         const newQueryString = newParams.toString();
         const currentQueryString = searchParams.toString();
@@ -107,6 +117,12 @@ export default function CityListingPage({ city, page, pageMetadata, initialData 
             params.set('photos', 'true');
         }
         filters.allowedTenants.forEach(t => params.append('tenant', t));
+        if (filters.minRent > 1000) {
+            params.set('min_rent', filters.minRent.toString());
+        }
+        if (filters.maxRent < 75000) {
+            params.set('max_rent', filters.maxRent.toString());
+        }
 
         return params.toString() ? `${basePath}?${params.toString()}` : basePath;
     };

@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { X, Check, Search, Loader2 } from 'lucide-react';
 import { Switch } from "../ui/switch";
 import { Label } from "../ui/label";
+import { Slider } from "../ui/slider";
 import { motion, AnimatePresence } from 'framer-motion';
 import { API_BASE } from '@/lib/constants';
 
@@ -17,12 +18,14 @@ export interface FilterOptions {
 }
 
 export interface FilterState {
-    genderFilter: 'all' | 'male' | 'female';
+    genderFilter: string;
     brokerageFree: boolean;
     localities: string[];
     flatTypes: string[];
     withPhotos: boolean;
     allowedTenants: string[];
+    minRent: number;
+    maxRent: number;
 }
 
 interface FilterModalProps {
@@ -51,7 +54,7 @@ export default function FilterModal({ isOpen, onClose, currentFilters, onApply, 
     const fetchOptions = async () => {
         setLoading(true);
         try {
-            const response = await fetch(`${API_BASE}/api/flats/search/filters?city=${cityCode}&state=x`);
+            const response = await fetch(`${API_BASE}/search/filters?city=${cityCode}`);
             const data = await response.json();
             setOptions(data);
         } catch (error) {
@@ -91,7 +94,7 @@ export default function FilterModal({ isOpen, onClose, currentFilters, onApply, 
                 : [...prev.allowedTenants, tenant];
 
             // Sync with genderFilter
-            let newGender: 'all' | 'male' | 'female' = prev.genderFilter;
+            let newGender: string = prev.genderFilter;
             if (newTenants.includes('Male Only') && !newTenants.includes('Female Only')) newGender = 'male';
             else if (newTenants.includes('Female Only') && !newTenants.includes('Male Only')) newGender = 'female';
             else if (newTenants.length === 0) newGender = 'all'; // Reset if no tenant filter
@@ -141,6 +144,37 @@ export default function FilterModal({ isOpen, onClose, currentFilters, onApply, 
                                 </div>
                             ) : (
                                 <>
+                                    {/* Price Range */}
+                                    <div className="space-y-6 px-1">
+                                        <div className="flex items-center justify-between">
+                                            <h3 className="text-sm font-semibold text-slate-500 uppercase tracking-wider">Rent Range</h3>
+                                            <div className="flex items-center gap-2">
+                                                <span className="text-sm font-bold text-slate-900 bg-slate-100 px-2 py-1 rounded-md">
+                                                    ₹{filters.minRent.toLocaleString()}
+                                                </span>
+                                                <span className="text-slate-400">—</span>
+                                                <span className="text-sm font-bold text-slate-900 bg-slate-100 px-2 py-1 rounded-md">
+                                                    ₹{filters.maxRent.toLocaleString()}
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div className="px-2">
+                                            <Slider
+                                                defaultValue={[filters.minRent, filters.maxRent]}
+                                                max={75000}
+                                                min={1000}
+                                                step={500}
+                                                value={[filters.minRent, filters.maxRent]}
+                                                onValueChange={(value) => setFilters(prev => ({ ...prev, minRent: value[0], maxRent: value[1] }))}
+                                                className="py-4"
+                                            />
+                                        </div>
+                                        <div className="flex justify-between text-[10px] font-medium text-slate-400 uppercase tracking-tight">
+                                            <span>Min ₹1,000</span>
+                                            <span>Max ₹75,000</span>
+                                        </div>
+                                    </div>
+
                                     {/* Brokerage & Photos */}
                                     <div className="space-y-4">
                                         <div className="flex items-center justify-between p-3 bg-slate-50 rounded-xl border border-slate-100">
@@ -254,7 +288,9 @@ export default function FilterModal({ isOpen, onClose, currentFilters, onApply, 
                                         localities: [],
                                         flatTypes: [],
                                         withPhotos: false,
-                                        allowedTenants: []
+                                        allowedTenants: [],
+                                        minRent: 1000,
+                                        maxRent: 75000
                                     })}
                                     className="flex-1 px-4 py-3 text-slate-600 font-semibold hover:bg-slate-50 rounded-xl transition-colors border border-transparent hover:border-slate-200"
                                 >

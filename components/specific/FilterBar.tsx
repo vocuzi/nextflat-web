@@ -11,12 +11,14 @@ import { PageMetadata } from "@/lib/api";
 import { useState } from "react";
 
 export interface FilterState {
-  genderFilter: 'all' | 'male' | 'female';
+  genderFilter: string;
   brokerageFree: boolean;
   localities: string[];
   flatTypes: string[];
   withPhotos: boolean;
   allowedTenants: string[];
+  minRent: number;
+  maxRent: number;
 }
 
 interface FilterBarProps {
@@ -80,6 +82,12 @@ export default function FilterBar({ city, listingCount, onFilterChange, currentF
         params.append('flairs', 'Female Only');
       }
 
+      if (currentFilters.minRent > 1000) {
+        params.append('min_rent', currentFilters.minRent.toString());
+      }
+      if (currentFilters.maxRent < 75000) {
+        params.append('max_rent', currentFilters.maxRent.toString());
+      }
       const response = await fetch(`/api/flats?${params.toString()}`);
       const data = await response.json();
 

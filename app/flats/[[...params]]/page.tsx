@@ -138,6 +138,8 @@ export default async function UnifiedCityPage({
         localities: localities,
         flat_types: flatTypes,
         allowed_tenant: tenants,
+        min_rent: resolvedSearchParams.min_rent ? parseInt(resolvedSearchParams.min_rent as string) : undefined,
+        max_rent: resolvedSearchParams.max_rent ? parseInt(resolvedSearchParams.max_rent as string) : undefined,
     };
 
     if (gender === 'male') {

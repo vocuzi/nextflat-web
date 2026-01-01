@@ -12,20 +12,17 @@ export interface SearchFilters {
   flat_types?: string[];
   images_available?: string;
   allowed_tenant?: string[];
+  min_rent?: number;
+  max_rent?: number;
 }
 
 export async function searchFlats(filters: SearchFilters) {
   const params = new URLSearchParams();
   params.append('city', filters.city);
-  params.append('state', filters.state || '0');
   params.append('page', (filters.page || 1).toString());
 
   if (filters.brokerage_applicable) {
     params.append('brokerage_applicable', filters.brokerage_applicable);
-  }
-
-  if (filters.flairs) {
-    filters.flairs.forEach(f => params.append('flairs', f));
   }
 
   if (filters.localities) {
@@ -41,11 +38,19 @@ export async function searchFlats(filters: SearchFilters) {
   }
 
   if (filters.allowed_tenant) {
-    filters.allowed_tenant.forEach(t => params.append('allowed_tenant', t));
+    filters.allowed_tenant.forEach(t => params.append('available_for', t));
+  }
+  
+  if (filters.min_rent) {
+    params.append('rent_min', filters.min_rent.toString());
+  }
+  
+  if (filters.max_rent) {
+    params.append('rent_max', filters.max_rent.toString());
   }
 
   const res = await fetch(
-    `${API_BASE}/api/flats/search?${params.toString()}`,
+    `${API_BASE}/search?${params.toString()}`,
     {
       next: { revalidate: 3600 }, // ISR: revalidate every 1 hour
     }

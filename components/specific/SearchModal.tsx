@@ -5,15 +5,14 @@ import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { X } from "lucide-react";
 import { API_BASE } from "@/lib/constants";
-import activeCities from "@/data/EnabledFeatures";
+
 import { createPortal } from "react-dom";
 
 interface SearchResult {
-  type: string;
-  area: string;
-  city_name?: string;
-  city_slug?: string;
-  slug?: string;
+  id: string;
+  title: string;
+  subtitle: string;
+  href: string;
 }
 
 export default function SearchModal({
@@ -73,7 +72,7 @@ export default function SearchModal({
         }
 
         const res = await fetch(
-          `${API_BASE}/api/query/search?q=${encodeURIComponent(query)}`,
+          `${API_BASE}/search/query?q=${encodeURIComponent(query)}&cli=w`,
           {
             headers,
             signal: controller.signal,
@@ -141,31 +140,7 @@ export default function SearchModal({
   };
 
   const handleResultClick = (item: SearchResult) => {
-    let targetUrl = "/search";
-    const type = item.type.toLowerCase();
-
-    if (type === "city") {
-      const city = activeCities.find(
-        c => c.name.toLowerCase() === item.area.toLowerCase() ||
-          c.slug.includes(item.area.toLowerCase().replace(/\s+/g, '-'))
-      );
-      if (city) {
-        targetUrl = `/flats/${city.slug}`;
-      } else {
-        targetUrl = `/flats/flats-in-${item.area.toLowerCase().replace(/\s+/g, '-')}`;
-      }
-    } else if (type === "locality" || type === "area" || type === "society") {
-      let citySlug = item.city_slug;
-      if (!citySlug && item.city_name) {
-        const city = activeCities.find(c => c.name.toLowerCase() === item.city_name?.toLowerCase());
-        if (city) citySlug = city.slug;
-      }
-      if (!citySlug) citySlug = "flats-in-bengaluru";
-      const paramName = type === "society" ? "society" : "locality";
-      targetUrl = `/flats/${citySlug}?${paramName}=${encodeURIComponent(item.area)}`;
-    }
-
-    router.push(targetUrl);
+    router.push(item.href);
     onClose();
   };
 
@@ -268,8 +243,8 @@ export default function SearchModal({
                       </svg>
                     </div>
                     <div>
-                      <p className="text-base font-semibold text-slate-900 group-hover:text-emerald-700 transition-colors">{item.area}</p>
-                      <p className="text-xs font-medium text-slate-400 uppercase tracking-wide">{item.type} {item.city_name ? `• ${item.city_name}` : ""}</p>
+                      <p className="text-xs font-medium text-slate-400 uppercase tracking-wide">{item.subtitle}</p>
+                      <p className="text-base font-semibold text-slate-900 group-hover:text-emerald-700 transition-colors">{item.title}</p>
                     </div>
                   </motion.div>
                 ))}

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
@@ -10,19 +10,9 @@ import Footer from "@/components/Footer";
 import activeCities from "@/data/EnabledFeatures";
 import SearchModal from "@/components/specific/SearchModal";
 import AppPreview from '@/components/specific/AppPreview';
+import SearchMasthead from '@/components/specific/SearchMasthead';
 
 export default function SearchPage() {
-    const [isSearchOpen, setIsSearchOpen] = useState(false);
-    const words = ["Flats", "Flatmates", "PGs", "Localities", "Societies"];
-    const [index, setIndex] = useState(0);
-
-    useEffect(() => {
-        const interval = setInterval(() => {
-            setIndex((prev) => (prev + 1) % words.length);
-        }, 2500);
-        return () => clearInterval(interval);
-    }, [words.length]);
-
     const features = [
         {
             title: "WhatsApp Alerts",
@@ -50,78 +40,7 @@ export default function SearchPage() {
         <div className="min-h-screen bg-white">
             <Header />
 
-            {/* Masthead */}
-            <section className="relative pt-12 pb-16 md:pt-16 md:pb-24 px-4 md:px-6 overflow-hidden">
-                {/* Abstract Background Decorations */}
-                {/* <div className="absolute top-[-20%] right-[-10%] w-[500px] h-[500px] bg-emerald-50 rounded-full blur-3xl z-1 opacity-20" /> */}
-                <div className="pointer-events-none absolute top-[-200px] right-[-200px] w-[700px] h-[700px] rounded-full 
-    bg-[radial-gradient(circle_at_center,_rgba(16,185,129,0.35)_0%,_rgba(16,185,129,0.15)_35%,_transparent_70%)]
-    blur-3xl z-0 opacity-40">
-                </div>
-
-                <div className="max-w-4xl mx-auto flex flex-col items-center text-center">
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.5 }}
-                        className="mb-6 inline-flex items-center gap-2 px-3 py-1 md:px-4 md:py-1.5 rounded-full bg-emerald-50 border border-emerald-100/50 text-emerald-700 text-xs md:text-sm font-medium"
-                    >
-                        <span className="relative flex h-2 w-2">
-                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                            <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-                        </span>
-                        Real-time verified listings
-                    </motion.div>
-
-                    <h1 className="text-3xl sm:text-4xl md:text-6xl font-extrabold text-slate-900 tracking-tight leading-[1.15] mb-6 md:mb-8">
-                        <span className="block text-slate-400 font-semibold text-xl md:text-3xl mb-2">Search for your perfect</span>
-                        <div className="h-[1.2em] text-4xl inline-flex items-center justify-center min-w-[200px] md:min-w-[300px]">
-                            <AnimatePresence mode="wait">
-                                <motion.span
-                                    key={words[index]}
-                                    initial={{ y: 20, opacity: 0 }}
-                                    animate={{ y: 0, opacity: 1 }}
-                                    exit={{ y: -20, opacity: 0 }}
-                                    transition={{ duration: 0.4, ease: [0.23, 1, 0.32, 1] }}
-                                    className="bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent"
-                                >
-                                    {words[index]}
-                                </motion.span>
-                            </AnimatePresence>
-                        </div>
-                    </h1>
-
-                    <p className="text-base md:text-lg text-slate-600 mb-8 md:mb-10 max-w-2xl leading-relaxed">
-                        Discover verified properties and housemates without the brokerage.
-                        Tailored searches for the modern urban dweller.
-                    </p>
-
-                    <motion.div
-                        initial={{ opacity: 0, scale: 0.95 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ delay: 0.2, duration: 0.5 }}
-                        className="w-full max-w-2xl px-2 md:px-0"
-                    >
-                        <button
-                            onClick={() => setIsSearchOpen(true)}
-                            className="w-full flex items-center gap-3 md:gap-4 bg-white border border-slate-200 p-1.5 pl-4 md:p-2 md:pl-6 rounded-2xl shadow-lg hover:shadow-xl hover:border-emerald-300 transition-all group"
-                        >
-                            <Search className="w-5 h-5 text-slate-400 group-hover:text-emerald-500 transition-colors shrink-0" />
-                            <span className="flex-1 text-left text-slate-500 font-medium text-sm md:text-base truncate">Search by city, locality...</span>
-                            <div className="bg-slate-900 text-white px-4 py-2.5 md:px-6 md:py-3 rounded-xl font-semibold text-xs md:text-sm group-hover:bg-emerald-600 transition-colors whitespace-nowrap">
-                                Explore
-                                <span className="hidden md:inline"> Now</span>
-                            </div>
-                        </button>
-                    </motion.div>
-
-                    <div className="mt-8 flex flex-wrap justify-center gap-x-6 gap-y-3 text-xs md:text-sm text-slate-400 font-medium">
-                        <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-emerald-500" /> Zero Brokerage</span>
-                        <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-emerald-500" /> Verified Photos</span>
-                        <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-emerald-500" /> Direct Owners</span>
-                    </div>
-                </div>
-            </section>
+            <SearchMasthead />
 
             {/* Cities Section */}
             <section className="py-12 md:py-20 px-4 md:px-6 bg-slate-50/50">
@@ -300,19 +219,18 @@ export default function SearchPage() {
                         transition={{ delay: 0.6 }}
                         className="mt-16 text-center"
                     >
-                        <button
-                            onClick={() => setIsSearchOpen(true)}
+                        <Link
+                            href="/search"
                             className="inline-flex items-center gap-2 bg-slate-900 text-white px-8 py-4 rounded-2xl font-bold text-lg hover:bg-emerald-600 transition-all shadow-lg hover:shadow-emerald-200/50"
                         >
                             <Search className="w-5 h-5" />
                             Start Searching Now
-                        </button>
+                        </Link>
                     </motion.div>
                 </div>
             </section>
 
             <Footer />
-            <SearchModal open={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
         </div>
     );
 }
