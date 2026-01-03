@@ -24,9 +24,9 @@ export async function GET(request: NextRequest) {
       apiParams.append('brokerage_applicable', brokerageApplicable);
     }
 
-    const flairs = searchParams.get('flairs');
-    if (flairs) {
-      apiParams.append('flairs', flairs);
+    const availableFor = searchParams.getAll('available_for');
+    if (availableFor.length > 0) {
+      availableFor.forEach(val => apiParams.append('available_for', val));
     }
 
     const localities = searchParams.get('localities');

@@ -7,7 +7,6 @@ export interface SearchFilters {
   page?: number;
   state?: string;
   brokerage_applicable?: string;
-  flairs?: string[];
   localities?: string[];
   flat_types?: string[];
   images_available?: string;

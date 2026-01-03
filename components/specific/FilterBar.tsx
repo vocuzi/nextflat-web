@@ -77,9 +77,9 @@ export default function FilterBar({ city, listingCount, onFilterChange, currentF
       }
 
       if (currentFilters.genderFilter === 'male') {
-        params.append('flairs', 'Male Only');
+        params.append('available_for', 'Male Only');
       } else if (currentFilters.genderFilter === 'female') {
-        params.append('flairs', 'Female Only');
+        params.append('available_for', 'Female Only');
       }
 
       if (currentFilters.minRent > 1000) {

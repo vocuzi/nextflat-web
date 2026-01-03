@@ -142,10 +142,10 @@ export default async function UnifiedCityPage({
         max_rent: resolvedSearchParams.max_rent ? parseInt(resolvedSearchParams.max_rent as string) : undefined,
     };
 
-    if (gender === 'male') {
-        searchFilters.flairs = ['Male Only'];
-    } else if (gender === 'female') {
-        searchFilters.flairs = ['Female Only'];
+    if (gender === 'male' && !tenants.includes('Male Only')) {
+        searchFilters.allowed_tenant?.push('Male Only,Everyone,Bachelors,Not Specified');
+    } else if (gender === 'female' && !tenants.includes('Female Only')) {
+        searchFilters.allowed_tenant?.push('Female Only,Everyone,Bachelors,Not Specified');
     }
 
     // Fetch initial data for SSR
