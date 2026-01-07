@@ -55,17 +55,17 @@
 
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const flatId = params.id;
-    
+    const { id: flatId } = await params;
+
     // TODO: Implement your database query here
     // 1. Get the current flat's location (latitude, longitude, locality)
     // 2. Find nearby localities with available flats
     // 3. Calculate distances
     // 4. Return formatted response
-    
+
     // Mock response for development:
     const mockResponse = {
       localities: [
@@ -107,9 +107,9 @@ export async function GET(
         }
       ]
     };
-    
+
     return Response.json(mockResponse);
-    
+
   } catch (error) {
     console.error('Error fetching nearby localities:', error);
     return Response.json(

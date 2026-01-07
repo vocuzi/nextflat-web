@@ -44,7 +44,7 @@ export default function SeeMoreFlats({
                 )
                 const data = await res.json()
 
-                const transformed: Flat[] = data.results.map((item) => ({
+                const transformed: Flat[] = data.results.map((item: any) => ({
                     id: item.id,
                     locality: item.locality,
                     type: item.type,
@@ -55,6 +55,7 @@ export default function SeeMoreFlats({
                     image: item.image,
                     latitude: item.latitude,
                     longitude: item.longitude,
+                    available_for: item.available_for || 'Everyone', // Default value or from API
                 }))
 
                 setFlats(transformed)
