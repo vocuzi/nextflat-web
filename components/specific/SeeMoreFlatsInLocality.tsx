@@ -38,7 +38,7 @@ export default function SeeMoreFlats({
         const fetchFlats = async () => {
             try {
                 const res = await fetch(
-                    `${API_BASE}/api/flats/search?state=0&city=${cityCode}&page_size=6&exclude=${excludeId}&localities=${localityName}`
+                    `${API_BASE}/search/?city=${cityCode}&page_size=6&exclude=${excludeId}&localities=${localityName}`
                 )
                 const data = await res.json()
 

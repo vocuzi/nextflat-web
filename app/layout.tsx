@@ -12,7 +12,7 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://nextflat.in"),
   title: {
     default: 'NextFlat - Shared Flats, Roommates & PGs without brokerage',
-    template: "%s | NextFlat",
+    template: "%s | NextFlat - Flats & Flatmates",
   },
 
   description:

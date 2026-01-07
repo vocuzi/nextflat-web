@@ -30,7 +30,7 @@ import SeeMoreFlats from './SeeMoreFlatsInLocality';
 
 interface FlatDetails {
     id: number;
-    locality: string; city: string; type: string; rent_amount: number; security_amount: number; brokerage_applicable: boolean | string;
+    locality: string; city: string; city_code: string; type: string; rent_amount: number; security_amount: number; brokerage_applicable: boolean | string;
     images: string[];
     description: string;
     amenities: string[];
@@ -353,11 +353,11 @@ export default function FlatDetailsPage({ flat }: FlatDetailsPageProps) {
                 </div>
             )}
 
-            <div className="bg-slate-50 border-t border-slate-200 mt-12 py-12">
+            <div className="bg-slate-50 mt-12 py-12">
                 <main className="max-w-7xl mx-auto px-4 md:px-6 space-y-12">
                     <SeeMoreFlats
                         localityName={flat.locality}
-                        cityCode={"PNQ"}
+                        cityCode={flat.city_code}
                         excludeId={flat.id}
                         locationSlug={flat.city}
                     />

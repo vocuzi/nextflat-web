@@ -46,12 +46,19 @@ export default function NearbyLocalitiesSection({
 
     if (loading || error || localities.length === 0) return null;
 
-    const gradients = [
-        'bg-gradient-to-br from-slate-800 via-slate-900 to-black',
-        'bg-gradient-to-br from-indigo-800 via-indigo-900 to-black',
-        'bg-gradient-to-br from-emerald-800 via-emerald-900 to-black',
-        'bg-gradient-to-br from-rose-800 via-rose-900 to-black',
-        'bg-gradient-to-br from-amber-800 via-amber-900 to-black',
+    const colors = [
+        'bg-slate-800',
+        'bg-indigo-800',
+        'bg-emerald-800',
+        'bg-rose-800',
+        'bg-amber-800',
+    ];
+
+    const patterns = [
+        '/patterns/autumn.svg',
+        '/patterns/formal-invitation.svg',
+        '/patterns/line-in-motion.svg',
+        '/patterns/wiggle.svg',
     ];
 
     return (
@@ -77,7 +84,8 @@ export default function NearbyLocalitiesSection({
                 <div className="relative -mx-4 md:-mx-0">
                     <div className="flex gap-4 md:gap-6 overflow-x-auto pb-8 pt-2 px-4 md:px-2 snap-x snap-mandatory scrollbar-hide">
                         {localities.map((loc, index) => {
-                            const gradient = gradients[index % gradients.length];
+                            const color = colors[index % colors.length];
+                            const pattern = patterns[index % patterns.length];
 
                             return (
                                 <Link
@@ -90,7 +98,7 @@ export default function NearbyLocalitiesSection({
                                         snap-start shrink-0
                                         w-[260px] h-[320px]
                                         rounded-3xl p-6
-                                        ${gradient}
+                                        ${color}
                                         flex flex-col justify-between
                                         overflow-hidden
                                         transition-all duration-500 ease-out
@@ -101,6 +109,16 @@ export default function NearbyLocalitiesSection({
                                     {/* Abstract Background Shapes */}
                                     <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full blur-3xl -mr-10 -mt-10 group-hover:bg-white/10 transition-colors" />
                                     <div className="absolute bottom-0 left-0 w-24 h-24 bg-black/20 rounded-full blur-2xl -ml-5 -mb-5" />
+
+                                    {/* Pattern Overlay */}
+                                    <div
+                                        className="absolute inset-0 opacity-20 mix-blend-overlay pointer-events-none"
+                                        style={{
+                                            backgroundImage: `url(${pattern})`,
+                                            backgroundSize: 'contain',
+                                            backgroundPosition: 'center',
+                                        }}
+                                    />
 
                                     {/* Top Content */}
                                     <div>
