@@ -1,4 +1,5 @@
 import { getPostBySlug, getPostSlugs } from "@/lib/mdx";
+import { ArticleJsonLd } from "next-seo";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import { notFound } from "next/navigation";
 import Link from "next/link";
@@ -53,6 +54,24 @@ export default async function BlogPost({ params }: Props) {
 
     return (
         <article className="max-w-3xl mx-auto px-4 py-16 sm:px-6 lg:px-8">
+            <ArticleJsonLd
+                url={`https://nextflat.in/blog/${post.slug}`}
+                headline={post.meta.title}
+                image={post.meta.image ? [post.meta.image] : []}
+                datePublished={post.meta.date}
+                author={[{
+                    name: post.meta.author || 'NextFlat Team',
+                    url: 'https://nextflat.in',
+                }]}
+                publisher={{
+                    name: "NextFlat",
+                    logo: {
+                        url: "https://nextflat.in/static/images/logo.webp"
+                    }
+                }}
+                description={post.meta.summary}
+                isAccessibleForFree={true}
+            />
             <div className="mb-8 block">
                 <Link href="/blog" className="text-sm font-medium text-slate-500 hover:text-slate-900 transition-colors">
                     &larr; Back to Blog

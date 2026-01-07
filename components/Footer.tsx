@@ -17,7 +17,7 @@ export default function Footer() {
               <Image src={"/logo.svg"} alt="NextFlat Logo" width={120} height={28} />
             </Link>
             <p className="text-slate-500 text-sm max-w-sm leading-relaxed">
-              Experience the modern way of shared living. Verified listings, AI-powered matches, and zero brokerage.
+              Verified listings, AI-powered matches. Whether you're searching for a shared flat or listing one, NextFlat is built to work for you while you relax.
             </p>
             <div className="flex gap-4">
               <SocialIcon icon={<Facebook size={18} />} href="#" />
