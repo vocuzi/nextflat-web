@@ -5,7 +5,7 @@ import { Bell, Zap, Sliders, Mail } from 'lucide-react';
 export default function AlertsSection() {
     return (
         <section className="py-24 bg-white overflow-hidden">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="max-w-7xl mx-auto px-8 lg:px-8">
                 <div className="lg:grid lg:grid-cols-2 lg:gap-16 items-center">
                     <div className="mb-12 lg:mb-0">
                         <div className="inline-flex items-center px-3 py-1 rounded-full bg-slate-900 text-green-300 text-sm font-medium mb-6">

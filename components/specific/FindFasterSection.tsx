@@ -33,9 +33,9 @@ export default function FindFasterSection() {
                     </p>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div className="flex overflow-x-auto snap-x snap-mandatory gap-4 pb-4 md:pb-0 -mx-4 px-4 md:grid md:grid-cols-3 md:gap-8 md:mx-0 md:px-0 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
                     {features.map((feature, index) => (
-                        <div key={index} className="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow">
+                        <div key={index} className="flex-none w-[85%] sm:w-[350px] md:w-auto snap-center bg-white p-8 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow">
                             <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center mb-6">
                                 {feature.icon}
                             </div>

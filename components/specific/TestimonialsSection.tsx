@@ -31,9 +31,9 @@ export default function TestimonialsSection() {
                     Feedback from people
                 </h2>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div className="flex overflow-x-auto snap-x snap-mandatory gap-4 pb-4 md:pb-0 -mx-4 px-4 md:grid md:grid-cols-3 md:gap-8 md:mx-0 md:px-0 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
                     {testimonials.map((item, index) => (
-                        <div key={index} className="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 flex flex-col h-full">
+                        <div key={index} className="flex-none w-[85%] sm:w-[350px] md:w-auto snap-center bg-white p-8 rounded-2xl shadow-sm border border-slate-100 flex flex-col h-full">
                             <div className="flex space-x-1 mb-4">
                                 {[...Array(5)].map((_, i) => (
                                     <Star key={i} className="w-4 h-4 text-amber-400 fill-current" />

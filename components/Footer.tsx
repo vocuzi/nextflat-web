@@ -72,6 +72,7 @@ export default function Footer() {
 
         <div className="border-t border-slate-100 pt-8 flex flex-col md:flex-row justify-between items-center text-xs text-slate-400 gap-4">
           <p>© {new Date().getFullYear()} NextFlat.in. All rights reserved.</p>
+          <p>Powered by <a href="https://greybits.in" target="_blank" rel="noopener noreferrer" className="hover:text-slate-600 transition-colors">GreyBits.</a></p>
           <div className="flex gap-6">
             <Link href="/privacy" className="hover:text-slate-600">Privacy</Link>
             <Link href="/terms" className="hover:text-slate-600">Terms</Link>

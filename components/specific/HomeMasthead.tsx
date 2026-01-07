@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { NfBtn } from "../generic/buttons/Btn";
+import DownloadAppModal from "../modals/DownloadAppModal";
 import { Search, Smartphone, Bell, Plus, FileText } from "lucide-react";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -9,6 +10,7 @@ import { motion, AnimatePresence } from "framer-motion";
 export default function HomeMasthead() {
   const words = ["Flatmates", "Tenants", "Roommates", "PGs", "Flats"];
   const [index, setIndex] = useState(0);
+  const [isDownloadModalOpen, setIsDownloadModalOpen] = useState(false);
 
   const actions = [
     { label: "Search Flats", href: "/flats", icon: <Search size={20} className="text-green-300" /> },
@@ -116,11 +118,13 @@ export default function HomeMasthead() {
             variant="outline"
             icon={<Smartphone size={20} />}
             className="w-[280px] sm:w-auto border-slate-200 bg-white text-slate-700 hover:bg-slate-50 hover:border-slate-900 hover:text-slate-900 rounded-xl px-8 h-12"
+            onClick={() => setIsDownloadModalOpen(true)}
           >
             Get the App
           </NfBtn>
         </div>
       </div>
+      <DownloadAppModal isOpen={isDownloadModalOpen} onClose={() => setIsDownloadModalOpen(false)} />
     </section>
   );
 }

@@ -110,7 +110,6 @@ export default function Home() {
 
         <StatsMinimal />
 
-        <FindFasterSection />
 
         <div className="max-w-7xl mx-auto w-full px-4 py-16">
           <div className="flex items-center justify-between mb-8 px-2">
@@ -119,6 +118,7 @@ export default function Home() {
           </div>
           <FlatCardGrid />
         </div>
+        <FindFasterSection />
 
         <AppFeatures />
 

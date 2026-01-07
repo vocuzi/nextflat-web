@@ -1,6 +1,6 @@
 
 const stats = [
-    { label: "Active Users", value: "10,000+" },
+    { label: "Active Users", value: "4,000+" },
     { label: "Cities", value: "5+" },
     { label: "New Listings every week", value: "1,000+" },
     { label: "Brokerage", value: "0%" },
