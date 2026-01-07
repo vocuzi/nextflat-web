@@ -4,6 +4,8 @@ import { NfBtn } from "../generic/buttons/Btn";
 import { FaAppStore } from "react-icons/fa6";
 import { FaGooglePlay } from "react-icons/fa6";
 import AppPreview from "./AppPreview";
+import { APP_LINKS } from "../../lib/constants";
+
 
 export default function AppDownloadCta() {
     return (
@@ -36,7 +38,7 @@ export default function AppDownloadCta() {
 
                         <div className="flex flex-col sm:flex-row gap-4 pt-4 justify-center md:justify-start">
                             <a
-                                href="https://apps.apple.com/in/app/nextflat-flatmates-pgs/id6756124985"
+                                href={APP_LINKS.appStore}
                                 target="_blank"
                                 rel="noopener noreferrer" className="group flex cursor-pointer items-center gap-3 bg-white text-slate-950 px-6 py-3.5 rounded-xl font-bold hover:bg-slate-50 transition-all hover:scale-105 active:scale-95 shadow-lg shadow-white/5">
                                 <FaAppStore size={24} />
@@ -46,7 +48,7 @@ export default function AppDownloadCta() {
                                 </div>
                             </a>
                             <a
-                                href="https://play.google.com/store/apps/details?id=in.nextflat.app"
+                                href={APP_LINKS.playStore}
                                 target="_blank"
                                 rel="noopener noreferrer" className="group flex cursor-pointer items-center gap-3 bg-slate-800/50 text-white border border-slate-700/50 px-6 py-3.5 rounded-xl font-bold hover:bg-slate-800 transition-all hover:scale-105 active:scale-95 backdrop-blur-sm">
                                 <FaGooglePlay size={22} />

@@ -17,6 +17,8 @@ import {
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Image from 'next/image';
+import { APP_LINKS } from "../../lib/constants";
+
 
 export default function SetupAlertsPage() {
     const stats = [
@@ -139,7 +141,7 @@ export default function SetupAlertsPage() {
                         {/* App Store Buttons */}
                         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12 px-6">
                             <a
-                                href="https://play.google.com/store/apps/details?id=in.nextflat.app"
+                                href={APP_LINKS.playStore}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="group flex items-center gap-3 px-4 justify-center py-2 bg-white hover:bg-blue-50 text-slate-900 rounded-xl transition-all transform hover:scale-105 shadow-2xl w-full sm:w-auto"
@@ -155,7 +157,7 @@ export default function SetupAlertsPage() {
                             </a>
 
                             <a
-                                href="https://apps.apple.com"
+                                href={APP_LINKS.appStore}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="group flex items-center gap-3 px-4 justify-center py-2 bg-white hover:bg-blue-50 text-slate-900 rounded-xl transition-all transform hover:scale-105 shadow-2xl w-full sm:w-auto"
@@ -368,7 +370,7 @@ export default function SetupAlertsPage() {
 
                     <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
                         <a
-                            href="https://play.google.com/store/apps/details?id=in.nextflat.app"
+                            href={APP_LINKS.playStore}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="group flex items-center gap-3 px-8 py-4 bg-slate-900 hover:bg-slate-800 text-white rounded-xl transition-all transform hover:scale-105 shadow-2xl w-full sm:w-auto"
@@ -380,7 +382,7 @@ export default function SetupAlertsPage() {
                         </a>
 
                         <a
-                            href="https://apps.apple.com"
+                            href={APP_LINKS.appStore}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="group flex items-center gap-3 px-8 py-4 bg-slate-900 hover:bg-slate-800 text-white rounded-xl transition-all transform hover:scale-105 shadow-2xl w-full sm:w-auto"

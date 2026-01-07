@@ -46,38 +46,38 @@ export default function NearbyLocalitiesSection({
 
     if (loading || error || localities.length === 0) return null;
 
-    const colorSchemes = [
-        'bg-slate-800 text-slate-100',
-        'bg-indigo-800 text-indigo-100',
-        'bg-emerald-800 text-emerald-100',
-        'bg-rose-800 text-rose-100',
-        'bg-amber-800 text-amber-100',
+    const gradients = [
+        'bg-gradient-to-br from-slate-800 via-slate-900 to-black',
+        'bg-gradient-to-br from-indigo-800 via-indigo-900 to-black',
+        'bg-gradient-to-br from-emerald-800 via-emerald-900 to-black',
+        'bg-gradient-to-br from-rose-800 via-rose-900 to-black',
+        'bg-gradient-to-br from-amber-800 via-amber-900 to-black',
     ];
 
     return (
-        <section className="py-14 overflow-hidden">
-            <div className="max-w-7xl mx-auto px-4">
+        <section className="py-20 bg-slate-50/50">
+            <div className="max-w-7xl mx-auto px-4 md:px-6">
                 {/* Header */}
-                <div className="mb-6">
-                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-800 text-white text-sm font-medium mb-3">
-                        <MapPin size={14} className='text-green-300' />
+                <div className="mb-10 text-center md:text-left">
+                    <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-slate-900 text-white text-sm font-medium mb-4 shadow-sm">
+                        <MapPin size={14} className='text-emerald-400' />
                         Explore Nearby Areas
                     </div>
 
-                    <h2 className="text-2xl md:text-3xl font-bold text-slate-800 mb-2">
-                        More Localities near {locality}
+                    <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-3 tracking-tight">
+                        More Localities near <span className="text-primary">{locality}</span>
                     </h2>
 
-                    <p className="text-slate-400 max-w-xl">
-                        Explore more nearby neighborhoods with available flats if were not able to find any listings in {locality}.
+                    <p className="text-slate-500 max-w-2xl text-lg md:text-left mx-auto md:mx-0 leading-relaxed">
+                        Can't find what you're looking for? Explore these popular neighborhoods nearby that offer great living options.
                     </p>
                 </div>
 
                 {/* Horizontal Scroll */}
-                <div className="relative">
-                    <div className="flex gap-4 overflow-x-auto pb-4 pt-2 snap-x snap-mandatory scrollbar-hide">
+                <div className="relative -mx-4 md:-mx-0">
+                    <div className="flex gap-4 md:gap-6 overflow-x-auto pb-8 pt-2 px-4 md:px-2 snap-x snap-mandatory scrollbar-hide">
                         {localities.map((loc, index) => {
-                            const color = colorSchemes[index % colorSchemes.length];
+                            const gradient = gradients[index % gradients.length];
 
                             return (
                                 <Link
@@ -86,42 +86,50 @@ export default function NearbyLocalitiesSection({
                                         .toLowerCase()
                                         .replace(/\s+/g, '-')}/${loc.locality_name}`}
                                     className={`
+                                        group relative
                                         snap-start shrink-0
-                                        w-[200px] h-[260px]
-                                        rounded-2xl p-5
-                                        ${color}
-                                        relative overflow-hidden
-                                        transition-all duration-300
-                                        hover:-mt-2 hover:shadow-xl
+                                        w-[260px] h-[320px]
+                                        rounded-3xl p-6
+                                        ${gradient}
+                                        flex flex-col justify-between
+                                        overflow-hidden
+                                        transition-all duration-500 ease-out
+                                        hover:-translate-y-2 hover:shadow-2xl hover:shadow-slate-900/20
+                                        border border-white/10
                                     `}
                                 >
-                                    {/* Icon */}
-                                    <div className="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center mb-4">
-                                        <Home className="text-green-300" />
-                                    </div>
+                                    {/* Abstract Background Shapes */}
+                                    <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full blur-3xl -mr-10 -mt-10 group-hover:bg-white/10 transition-colors" />
+                                    <div className="absolute bottom-0 left-0 w-24 h-24 bg-black/20 rounded-full blur-2xl -ml-5 -mb-5" />
 
-                                    {/* Content */}
-                                    <h3 className="text-xl font-bold mb-2">
-                                        {loc.locality_name}
-                                    </h3>
+                                    {/* Top Content */}
+                                    <div>
+                                        <div className="w-12 h-12 rounded-2xl bg-white/10 backdrop-blur-md flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 border border-white/10">
+                                            <Home className="text-emerald-300 w-6 h-6" />
+                                        </div>
 
-                                    <p className="text-sm opacity-80 mb-6">
-                                        {loc.distance_km.toFixed(1)} km away
-                                    </p>
-
-                                    {/* Stats */}
-                                    <div className="absolute bottom-5 left-5 right-5">
-                                        <div className="flex items-center justify-between text-sm font-medium">
-                                            <span className="opacity-80">Available Flats</span>
-                                            <span className="text-lg font-bold">
-                                                {loc.flat_count}
-                                            </span>
+                                        <h3 className="text-2xl font-bold text-white mb-2 leading-tight">
+                                            {loc.locality_name}
+                                        </h3>
+                                        <div className="flex items-center gap-2 text-white/60 text-sm">
+                                            <MapPin size={14} />
+                                            <span>{loc.distance_km.toFixed(1)} km away</span>
                                         </div>
                                     </div>
 
-                                    {/* SVG filler hook (future) */}
-                                    <div className="absolute inset-0 pointer-events-none opacity-[0.12]">
-                                        {/* SVG filler will sit here */}
+                                    {/* Bottom Content */}
+                                    <div className="relative z-10">
+                                        <div className="p-4 rounded-xl bg-white/10 backdrop-blur-md border border-white/5 group-hover:bg-white/15 transition-colors">
+                                            <div className="flex items-center justify-between">
+                                                <div>
+                                                    <p className="text-xs text-white/50 uppercase tracking-wider font-semibold mb-0.5">Available</p>
+                                                    <p className="text-white font-bold text-xl">{loc.flat_count} Flats</p>
+                                                </div>
+                                                <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">
+                                                    <ArrowRight size={14} className="text-white -rotate-45 group-hover:rotate-0 transition-transform duration-300" />
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </Link>
                             );
@@ -133,23 +141,26 @@ export default function NearbyLocalitiesSection({
                                 .toLowerCase()
                                 .replace(/\s+/g, '-')}`}
                             className="
+                                group
                                 snap-start shrink-0
-                                w-[200px] h-[260px]
-                                rounded-2xl
-                                px-4
-                                border-3 border-dashed border-slate-300
-                                flex flex-col items-center justify-center
-                                text-slate-300
-                                hover:text-white hover:border-slate-500
-                                transition-all
+                                w-[260px] h-[320px]
+                                rounded-3xl p-6
+                                bg-white
+                                border border-slate-200
+                                flex flex-col items-center justify-center text-center
+                                hover:border-slate-300 hover:shadow-xl hover:shadow-slate-200/50
+                                transition-all duration-300
                             "
                         >
-                            <div className="w-12 h-12 rounded-full bg-slate-800 flex items-center justify-center mb-4">
-                                <ArrowRight />
+                            <div className="w-16 h-16 rounded-full bg-slate-50 flex items-center justify-center mb-6 group-hover:bg-slate-100 group-hover:scale-110 transition-all duration-300">
+                                <ArrowRight className="w-7 h-7 text-slate-800" />
                             </div>
 
-                            <p className="text-lg font-semibold text-slate-900 text-center">
-                                View all localities in {city}
+                            <h3 className="text-xl font-bold text-slate-800 mb-2">
+                                View all in {city}
+                            </h3>
+                            <p className="text-slate-500 text-sm px-4">
+                                Browse all available localities and listings
                             </p>
                         </Link>
                     </div>

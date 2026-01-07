@@ -1,6 +1,8 @@
 'use client';
 
 import { Phone } from 'lucide-react';
+import { APP_LINKS } from "../../lib/constants";
+
 
 interface AppOnlyFeatureModalProps {
     isOpen: boolean;
@@ -58,7 +60,7 @@ export default function AppOnlyFeatureModal({
                 <div className="space-y-3">
                     {/* Google Play Store */}
                     <a
-                        href="https://play.google.com/store/apps/details?id=in.nextflat.app"
+                        href={APP_LINKS.playStore}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="flex items-center justify-center gap-3 w-full py-3 px-4 bg-slate-900 hover:bg-slate-800 text-white rounded-xl transition-all transform hover:scale-105 shadow-lg"
@@ -71,7 +73,7 @@ export default function AppOnlyFeatureModal({
 
                     {/* Apple App Store */}
                     <a
-                        href="https://apps.apple.com"
+                        href={APP_LINKS.appStore}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="flex items-center justify-center gap-3 w-full py-3 px-4 bg-slate-900 hover:bg-slate-800 text-white rounded-xl transition-all transform hover:scale-105 shadow-lg"

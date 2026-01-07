@@ -105,8 +105,8 @@ export default function FlatDetailsPage({ flat }: FlatDetailsPageProps) {
 
             <section className="grid grid-cols-1 mx-3">
                 <div className="bg-gray-100 text-slate-900 flex flex-col rounded-lg">
-                    <div className="px-4 py-2">
-                        <div className="flex items-center gap text-slate-300 text-xs truncate overflow-hidden whitespace-nowrap max-w-full">
+                    <div className="px-4 py-2.5">
+                        <div className="flex items-center gap text-slate-300 text-sm truncate overflow-hidden whitespace-nowrap max-w-full">
                             <Link href="/">
                                 <HiMiniHome className="text-slate-800 text-lg shrink-0" />
                             </Link>
@@ -115,7 +115,7 @@ export default function FlatDetailsPage({ flat }: FlatDetailsPageProps) {
 
                             <Link
                                 href={`/flats/flats-in-${flat.city.toLowerCase().replace(/\s+/g, '-')}`}
-                                className="text-slate-800"
+                                className="text-slate-600"
                             >
                                 {flat.city}
                             </Link>
@@ -124,7 +124,7 @@ export default function FlatDetailsPage({ flat }: FlatDetailsPageProps) {
 
                             <Link
                                 href={`/flats/flats-in-${flat.city.toLowerCase().replace(/\s+/g, '-')}/${flat.locality}`}
-                                className="text-slate-800"
+                                className="text-slate-600"
                             >
                                 {flat.locality}
                             </Link>
@@ -339,15 +339,6 @@ export default function FlatDetailsPage({ flat }: FlatDetailsPageProps) {
                                     referrerPolicy="no-referrer-when-downgrade"
                                     title="Maps embedd for the Flat listing"
                                 ></iframe>
-                                {/* <a
-                                    href={flat.google_maps_link}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="relative z-10 px-4 py-2 bg-white rounded-lg shadow text-sm font-medium text-slate-900 hover:bg-slate-50 flex items-center gap-2"
-                                >
-                                    <MapPin size={16} className="text-red-500" />
-                                    View on Google Maps
-                                </a> */}
                             </div>
                         </div>
 
@@ -372,13 +363,6 @@ export default function FlatDetailsPage({ flat }: FlatDetailsPageProps) {
                     </div>
                 </div>
             )}
-
-            {/* <SeeMoreFlats
-                localityName={flat.locality}
-                cityCode={flat.city}
-                excludeId={flat.id}
-                locationSlug={flat.location_slug}
-            /> */}
 
             {/* Nearby Flats Section */}
             <SeeMoreFlats

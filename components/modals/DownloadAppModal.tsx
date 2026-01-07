@@ -3,6 +3,8 @@
 import { Smartphone } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
+import { APP_LINKS } from "../../lib/constants";
+
 
 interface DownloadAppModalProps {
     isOpen: boolean;
@@ -79,7 +81,7 @@ export default function DownloadAppModal({
                             <div className="space-y-3">
                                 {/* Google Play Store */}
                                 <a
-                                    href="https://play.google.com/store/apps/details?id=in.nextflat.app"
+                                    href={APP_LINKS.playStore}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="flex items-center justify-center gap-3 w-full py-3.5 px-4 bg-slate-900 hover:bg-slate-800 text-white rounded-xl transition-all transform hover:scale-[1.02] active:scale-[0.98] shadow-lg group"
@@ -92,7 +94,7 @@ export default function DownloadAppModal({
 
                                 {/* Apple App Store */}
                                 <a
-                                    href="https://apps.apple.com/in/app/nextflat-flatmates-pgs/id6756124985"
+                                    href={APP_LINKS.appStore}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="flex items-center justify-center gap-3 w-full py-3.5 px-4 bg-slate-100 hover:bg-slate-200 text-slate-900 border border-slate-200 rounded-xl transition-all transform hover:scale-[1.02] active:scale-[0.98] group"
