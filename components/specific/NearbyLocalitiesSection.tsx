@@ -1,14 +1,13 @@
 'use client';
 
-import { MapPin, Home, ArrowRight } from 'lucide-react';
-import { useState, useEffect } from 'react';
+import { MapPin, Home, ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
+import { API_BASE } from '@/lib/constants';
 
 interface NearbyLocality {
-    locality_name: string;
-    distance_km: number;
-    flat_count: number;
-    city: string;
+    name: string;
+    count: number;
 }
 
 interface NearbyLocalitiesSectionProps {
@@ -25,15 +24,17 @@ export default function NearbyLocalitiesSection({
     const [localities, setLocalities] = useState<NearbyLocality[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const scrollRef = useRef<HTMLDivElement | null>(null)
 
     useEffect(() => {
         const fetchNearbyLocalities = async () => {
             try {
                 setLoading(true);
-                const response = await fetch(`/api/flats/${flatId}/nearby-localities`);
+                const response = await fetch(`${API_BASE}/api/flats/${flatId}/recommend/localities`,
+                    { cache: 'no-store' });
                 if (!response.ok) throw new Error('Failed to fetch nearby localities');
                 const data = await response.json();
-                setLocalities(data.localities || []);
+                setLocalities(data.results || []);
             } catch (err) {
                 setError(err instanceof Error ? err.message : 'Error');
             } finally {
@@ -61,6 +62,15 @@ export default function NearbyLocalitiesSection({
         '/patterns/wiggle.svg',
     ];
 
+    const scrollByAmount = (direction: 'left' | 'right') => {
+        if (!scrollRef.current) return
+        const scrollAmount = 240
+        scrollRef.current.scrollBy({
+            left: direction === 'left' ? -scrollAmount : scrollAmount,
+            behavior: 'smooth',
+        })
+    }
+
     return (
         <section className="py-20 bg-slate-50/50">
             <div className="max-w-7xl mx-auto px-4 md:px-6">
@@ -70,29 +80,50 @@ export default function NearbyLocalitiesSection({
                         <MapPin size={14} className='text-emerald-400' />
                         Explore Nearby Areas
                     </div>
+                    <div className="flex items-start justify-between mb-6">
+                        <div>
+                            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-3 tracking-tight">
+                                More Localities near <span className="text-primary">{locality}</span>
+                            </h2>
 
-                    <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-3 tracking-tight">
-                        More Localities near <span className="text-primary">{locality}</span>
-                    </h2>
+                            <p className="text-slate-500 max-w-2xl text-lg md:text-left mx-auto md:mx-0 leading-relaxed">
+                                Can't find what you're looking for? Explore these popular neighborhoods nearby that offer great living options.
+                            </p>
+                        </div>
 
-                    <p className="text-slate-500 max-w-2xl text-lg md:text-left mx-auto md:mx-0 leading-relaxed">
-                        Can't find what you're looking for? Explore these popular neighborhoods nearby that offer great living options.
-                    </p>
+                        {/* Navigation buttons */}
+                        <div className="hidden md:flex gap-2">
+                            <button
+                                onClick={() => scrollByAmount('left')}
+                                className="p-2 rounded-full border hover:bg-slate-100"
+                                aria-label="Scroll left"
+                            >
+                                <ChevronLeft size={20} />
+                            </button>
+                            <button
+                                onClick={() => scrollByAmount('right')}
+                                className="p-2 rounded-full border hover:bg-slate-100"
+                                aria-label="Scroll right"
+                            >
+                                <ChevronRight size={20} />
+                            </button>
+                        </div>
+                    </div>
                 </div>
 
                 {/* Horizontal Scroll */}
                 <div className="relative -mx-4 md:-mx-0">
-                    <div className="flex gap-4 md:gap-6 overflow-x-auto pb-8 pt-2 px-4 md:px-2 snap-x snap-mandatory scrollbar-hide">
+                    <div ref={scrollRef} className="flex gap-4 md:gap-6 overflow-x-auto pb-8 pt-2 px-4 md:px-2 snap-x snap-mandatory scrollbar-hide">
                         {localities.map((loc, index) => {
                             const color = colors[index % colors.length];
                             const pattern = patterns[index % patterns.length];
 
                             return (
                                 <Link
-                                    key={`${loc.locality_name}-${index}`}
-                                    href={`/flats/flats-in-${loc.city
+                                    key={`${loc.name}-${index}`}
+                                    href={`/flats/flats-in-${city
                                         .toLowerCase()
-                                        .replace(/\s+/g, '-')}/${loc.locality_name}`}
+                                        .replace(/\s+/g, '-')}/${loc.name}`}
                                     className={`
                                         group relative
                                         snap-start shrink-0
@@ -127,11 +158,11 @@ export default function NearbyLocalitiesSection({
                                         </div>
 
                                         <h3 className="text-2xl font-bold text-white mb-2 leading-tight">
-                                            {loc.locality_name}
+                                            {loc.name}
                                         </h3>
                                         <div className="flex items-center gap-2 text-white/60 text-sm">
                                             <MapPin size={14} />
-                                            <span>{loc.distance_km.toFixed(1)} km away</span>
+                                            <span>nearby</span>
                                         </div>
                                     </div>
 
@@ -141,7 +172,7 @@ export default function NearbyLocalitiesSection({
                                             <div className="flex items-center justify-between">
                                                 <div>
                                                     <p className="text-xs text-white/50 uppercase tracking-wider font-semibold mb-0.5">Available</p>
-                                                    <p className="text-white font-bold text-xl">{loc.flat_count} Flats</p>
+                                                    <p className="text-white font-bold text-xl">{loc.count} Flats</p>
                                                 </div>
                                                 <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">
                                                     <ArrowRight size={14} className="text-white -rotate-45 group-hover:rotate-0 transition-transform duration-300" />

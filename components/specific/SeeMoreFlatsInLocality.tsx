@@ -1,8 +1,9 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { FlatCard } from './CityFlatsList'
 import { API_BASE } from '@/lib/constants'
+import { ChevronLeft, ChevronRight, MapPin } from 'lucide-react'
 
 type Flat = {
     id: number
@@ -33,101 +34,140 @@ export default function SeeMoreFlats({
 }: SeeMoreFlatsProps) {
     const [flats, setFlats] = useState<Flat[]>([])
     const [loading, setLoading] = useState(true)
+    const scrollRef = useRef<HTMLDivElement | null>(null)
 
     useEffect(() => {
-        const fetchFlats = async () => {
+        let cancelled = false
+
+        async function fetchFlats() {
             try {
                 const res = await fetch(
-                    `${API_BASE}/search/?city=${cityCode}&page_size=6&exclude=${excludeId}&localities=${localityName}`
+                    `${API_BASE}/api/flats/${excludeId}/recommend/listings`,
+                    { cache: 'no-store' }
                 )
+
+                if (!res.ok) return
+
                 const data = await res.json()
 
-                const transformed: Flat[] = data.results.map((item: any) => ({
-                    id: item.id,
-                    locality: item.locality,
-                    type: item.type,
-                    rent_amount: String(item.rent_amount),
-                    security_amount: String(item.security_amount),
-                    posted_at: item.posted_at,
-                    user: item.user || undefined,
-                    image: item.image,
-                    latitude: item.latitude,
-                    longitude: item.longitude,
-                }))
+                if (cancelled) return
 
-                setFlats(transformed)
-            } catch (error) {
-                console.error('Failed to fetch flats:', error)
+                setFlats(
+                    data.results.map((item: any) => ({
+                        id: item.id,
+                        locality: item.locality,
+                        type: item.type,
+                        rent_amount: String(item.rent_amount),
+                        security_amount: String(item.security_amount),
+                        posted_at: item.posted_at,
+                        user: item.user || undefined,
+                        image: item.image,
+                        latitude: item.latitude,
+                        longitude: item.longitude,
+                        available_for: item.available_for,
+                    }))
+                )
+            } catch (err) {
+                console.error('Failed to fetch flats:', err)
             } finally {
-                setLoading(false)
+                if (!cancelled) setLoading(false)
             }
         }
 
         fetchFlats()
-    }, [cityCode, excludeId])
+        return () => {
+            cancelled = true
+        }
+    }, [excludeId, cityCode])
+
+    const scrollByAmount = (direction: 'left' | 'right') => {
+        if (!scrollRef.current) return
+        const scrollAmount = 240
+        scrollRef.current.scrollBy({
+            left: direction === 'left' ? -scrollAmount : scrollAmount,
+            behavior: 'smooth',
+        })
+    }
 
     if (loading) {
-        return <div className="py-8 text-center text-gray-500">Loading more flats...</div>
+        return (
+            <div className="py-8 text-center text-gray-500">
+                Loading more flats…
+            </div>
+        )
     }
 
-    if (flats.length === 0) {
-        return null
-    }
+    if (!flats.length) return null
 
     return (
-        <section className="py-10 overflow-hidden">
+        <section className="py-10">
             <div className="max-w-7xl mx-auto px-4">
-                <h2 className="mb-6 text-2xl font-semibold">See more flats in {localityName}</h2>
+                <div className="mb-10 text-center md:text-left">
+                    <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-slate-900 text-white text-sm font-medium mb-4 shadow-sm">
+                        <MapPin size={14} className='text-emerald-400' />
+                        NextFlat Recommendations
+                    </div>
+                    <div className="flex items-start justify-between mb-6">
+                        <div>
+                            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-3 tracking-tight">
+                                Recommended listings in <span className="text-primary">{localityName}</span>
+                            </h2>
 
-                {/* Horizontal Scroll */}
-                <div className="relative">
-                    <div className="flex gap-4 overflow-x-auto pb-4 pt-2 snap-x snap-mandatory scrollbar-hide">
-                        {/* Flat Cards */}
-                        {flats.map((flat) => (
-                            <div key={flat.id} className="snap-start shrink-0 w-[200px]">
-                                <FlatCard item={flat} />
-                            </div>
-                        ))}
-
-                        {/* See All Flats Card */}
-                        <a
-                            href={`/flats/${locationSlug}--${localityName}`}
-                            className="snap-start shrink-0 w-[200px] min-h-[320px] rounded-lg px-4 border-3 border-dashed border-slate-300 flex flex-col items-center justify-center text-slate-300 hover:text-white hover:border-slate-500 transition-all"
-                        >
-                            <div className="w-12 h-12 rounded-full bg-slate-800 flex items-center justify-center mb-4">
-                                <svg
-                                    className="w-6 h-6 text-white"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth={2}
-                                        d="M17 8l4 4m0 0l-4 4m4-4H3"
-                                    />
-                                </svg>
-                            </div>
-
-                            <p className="text-lg font-semibold text-slate-900 text-center">
-                                See all flats in {localityName}
+                            <p className="text-slate-500 max-w-2xl text-lg md:text-left mx-auto md:mx-0 leading-relaxed">
+                                Our AI-powered engine recommends more listings that you might be interested in.
                             </p>
-                        </a>
+                        </div>
+
+                        {/* Navigation buttons */}
+                        <div className="hidden md:flex gap-2">
+                            <button
+                                onClick={() => scrollByAmount('left')}
+                                className="p-2 rounded-full border hover:bg-slate-100"
+                                aria-label="Scroll left"
+                            >
+                                <ChevronLeft size={20} />
+                            </button>
+                            <button
+                                onClick={() => scrollByAmount('right')}
+                                className="p-2 rounded-full border hover:bg-slate-100"
+                                aria-label="Scroll right"
+                            >
+                                <ChevronRight size={20} />
+                            </button>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            {/* Custom CSS for hiding scrollbar */}
-            <style jsx>{`
-                .scrollbar-hide {
-                    -ms-overflow-style: none;
-                    scrollbar-width: none;
-                }
-                .scrollbar-hide::-webkit-scrollbar {
-                    display: none;
-                }
-            `}</style>
+                {/* Horizontal list */}
+                <div
+                    ref={scrollRef}
+                    className="flex gap-4 overflow-x-auto pb-4 snap-x snap-mandatory scrollbar-hide"
+                >
+                    {flats.map((flat) => (
+                        <div
+                            key={flat.id}
+                            className="snap-start shrink-0 w-[200px]"
+                        >
+                            <FlatCard item={flat} />
+                        </div>
+                    ))}
+
+                    {/* See All Card */}
+                    <a
+                        href={`/flats/${locationSlug}--${localityName}`}
+                        className="snap-start shrink-0 w-[200px] min-h-[320px] rounded-lg px-4 border-2 border-dashed border-slate-300
+                                   flex flex-col items-center justify-center text-slate-400
+                                   hover:border-slate-500 hover:text-slate-700 transition"
+                    >
+                        <div className="w-12 h-12 rounded-full bg-slate-800 flex items-center justify-center mb-4">
+                            <ChevronRight className="text-white" />
+                        </div>
+                        <p className="text-lg font-semibold text-center">
+                            See all flats in {localityName}
+                        </p>
+                    </a>
+                </div>
+            </div>
         </section>
     )
 }
