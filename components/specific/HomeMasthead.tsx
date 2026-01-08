@@ -6,6 +6,7 @@ import DownloadAppModal from "../modals/DownloadAppModal";
 import { Search, Smartphone, Bell, Plus, FileText } from "lucide-react";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { sendGAEvent } from '@next/third-parties/google';
 
 export default function HomeMasthead() {
   const words = ["Flatmates", "Tenants", "Roommates", "PGs", "Flats"];
@@ -96,6 +97,10 @@ export default function HomeMasthead() {
           <NfBtn
             size="lg"
             href={actions[actionIndex].href}
+            onClick={() => sendGAEvent('event', 'masthead_action_click', {
+              action_label: actions[actionIndex].label,
+              action_href: actions[actionIndex].href
+            })}
             className="bg-slate-900 text-white hover:text-green-300 hover:bg-slate-800 rounded-xl px-8 h-12 w-[280px]"
           >
             <AnimatePresence mode="wait">
@@ -118,7 +123,12 @@ export default function HomeMasthead() {
             variant="outline"
             icon={<Smartphone size={20} />}
             className="w-[280px] sm:w-auto border-slate-200 bg-white text-slate-700 hover:bg-slate-50 hover:border-slate-900 hover:text-slate-900 rounded-xl px-8 h-12"
-            onClick={() => setIsDownloadModalOpen(true)}
+            onClick={() => {
+              setIsDownloadModalOpen(true);
+              sendGAEvent('event', 'get_app_click', {
+                location: 'home_masthead'
+              });
+            }}
           >
             Get the App
           </NfBtn>

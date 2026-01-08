@@ -18,6 +18,8 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Image from 'next/image';
 import { APP_LINKS } from "../../lib/constants";
+import { sendGAEvent } from '@next/third-parties/google';
+
 
 
 export default function CreateListingPage() {
@@ -134,6 +136,10 @@ export default function CreateListingPage() {
                                 href={APP_LINKS.playStore}
                                 target="_blank"
                                 rel="noopener noreferrer"
+                                onClick={() => sendGAEvent('event', 'button_click', {
+                                    value: 'play_store',
+                                    label: 'Play Store Download'
+                                })}
                                 className="group flex items-center gap-3 px-4 justify-center py-2 bg-white hover:bg-green-50 text-slate-900 rounded-xl transition-all transform hover:scale-105 shadow-2xl w-full sm:w-auto"
                             >
                                 <svg className="w-8 h-8" viewBox="0 0 24 24" fill="currentColor">
@@ -150,6 +156,10 @@ export default function CreateListingPage() {
                                 href={APP_LINKS.appStore}
                                 target="_blank"
                                 rel="noopener noreferrer"
+                                onClick={() => sendGAEvent('event', 'button_click', {
+                                    value: 'app_store',
+                                    label: 'App Store Download'
+                                })}
                                 className="group flex items-center gap-3 px-4 justify-center py-2 bg-white hover:bg-green-50 text-slate-900 rounded-xl transition-all transform hover:scale-105 shadow-2xl w-full sm:w-auto"
                             >
                                 <svg className="w-8 h-8" viewBox="0 0 24 24" fill="currentColor">
@@ -293,6 +303,10 @@ export default function CreateListingPage() {
                             href={APP_LINKS.playStore}
                             target="_blank"
                             rel="noopener noreferrer"
+                            onClick={() => sendGAEvent('event', 'button_click', {
+                                value: 'play_store_footer',
+                                label: 'Android Download Footer'
+                            })}
                             className="group flex items-center gap-3 px-8 py-4 border-2 hover:bg-slate-800 text-white rounded-xl transition-all transform hover:scale-101 shadow-2xl w-full sm:w-auto"
                         >
                             <svg className="w-7 h-7" viewBox="0 0 24 24" fill="currentColor">
@@ -305,6 +319,10 @@ export default function CreateListingPage() {
                             href={APP_LINKS.appStore}
                             target="_blank"
                             rel="noopener noreferrer"
+                            onClick={() => sendGAEvent('event', 'button_click', {
+                                value: 'app_store_footer',
+                                label: 'iOS Download Footer'
+                            })}
                             className="group flex items-center gap-3 px-8 py-4 border-2 hover:bg-slate-800 text-white rounded-xl transition-all transform hover:scale-101 shadow-2xl w-full sm:w-auto"
                         >
                             <svg className="w-7 h-7" viewBox="0 0 24 24" fill="currentColor">
