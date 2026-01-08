@@ -3,7 +3,7 @@ export const revalidate = 3600; // regenerate every 1 hour
 import CityListingPage from "@/components/specific/CityListingPage";
 import activeCities from "@/data/EnabledFeatures";
 import { getPageMetadata, searchFlats, SearchFilters } from "@/lib/api";
-import { notFound } from "next/navigation";
+import { notFound, permanentRedirect } from "next/navigation";
 import { Metadata } from "next";
 
 // PRE-GENERATE ALL CITY PAGES AT BUILD TIME
@@ -36,7 +36,6 @@ export async function generateMetadata({
     const resolvedParams = await params;
     const urlParams = resolvedParams.params || [];
     const slug = urlParams[0];
-    const pageParam = urlParams[1];
 
     if (!slug) {
         return {
@@ -45,7 +44,17 @@ export async function generateMetadata({
         };
     }
 
-    const city = activeCities.find((c) => c.slug === slug);
+    // Handle slug and locality extraction
+    const citySlug = slug.includes('--') ? slug.split('--')[0] : slug;
+    let localitySlug = slug.includes('--') ? slug.split('--')[1] : null;
+    let pageParam = urlParams[1];
+
+    if (!localitySlug && pageParam && isNaN(Number(pageParam))) {
+        localitySlug = pageParam;
+        pageParam = urlParams[2];
+    }
+
+    const city = activeCities.find((c) => c.slug === citySlug);
     if (!city) {
         return {
             title: "Flats - NextFlat",
@@ -53,12 +62,13 @@ export async function generateMetadata({
         };
     }
 
-    const cityNameForApi = slug.replace('flats-in-', '');
-    const pageMetadata = await getPageMetadata(cityNameForApi);
+    const cityNameForApi = citySlug.replace('flats-in-', '');
+    const apiSlug = localitySlug ? `${cityNameForApi}/${localitySlug}` : cityNameForApi;
+    const pageMetadata = await getPageMetadata(apiSlug);
 
     const page = pageParam ? parseInt(pageParam, 10) : 1;
-    const pageTitle = pageMetadata?.page_title || `Flats and Flatmates in ${city.name}`;
-    const pageDesc = pageMetadata?.page_desc || `Find flats and flatmates in ${city.name}`;
+    const pageTitle = pageMetadata?.page_title || `Flats and Flatmates in ${localitySlug ? decodeURIComponent(localitySlug) : city.name}`;
+    const pageDesc = pageMetadata?.page_desc || `Find flats and flatmates in ${localitySlug ? decodeURIComponent(localitySlug) : city.name}`;
     const pageImage = pageMetadata?.page_opengraph;
 
     return {
@@ -84,16 +94,32 @@ export default async function UnifiedCityPage({
 
     // Extract slug and page from URL params
     const slug = urlParams[0];
-    const pageParam = urlParams[1];
 
     if (!slug) {
         notFound();
+    }
+
+    // 1. Handle double dash redirect
+    if (slug.includes('--')) {
+        const parts = slug.split('--');
+        if (parts.length === 2 && parts[0] && parts[1]) {
+            permanentRedirect(`/flats/${parts[0]}/${parts[1]}`);
+        }
     }
 
     const city = activeCities.find((c) => c.slug === slug);
 
     if (!city) {
         notFound();
+    }
+
+    // Identify locality and page number
+    let localitySlug = null;
+    let pageParam = urlParams[1];
+
+    if (pageParam && isNaN(Number(pageParam))) {
+        localitySlug = decodeURIComponent(pageParam);
+        pageParam = urlParams[2];
     }
 
     // Parse page number (default to 1 if not provided or invalid)
@@ -108,7 +134,8 @@ export default async function UnifiedCityPage({
 
     // Fetch page metadata from API
     const cityNameForApi = slug.replace('flats-in-', '');
-    const pageMetadata = await getPageMetadata(cityNameForApi);
+    const apiSlug = localitySlug ? `${cityNameForApi}/${localitySlug}` : cityNameForApi;
+    const pageMetadata = await getPageMetadata(apiSlug);
 
     // Build Search Filters from query params
     const gender = resolvedSearchParams.gender as string;
@@ -135,7 +162,7 @@ export default async function UnifiedCityPage({
         state: '0',
         brokerage_applicable: brokerage === 'free' ? 'false' : undefined,
         images_available: photos ? 'true' : undefined,
-        localities: localities,
+        localities: localitySlug ? [...new Set([localitySlug, ...localities])] : localities,
         flat_types: flatTypes,
         allowed_tenant: tenants,
         min_rent: resolvedSearchParams.min_rent ? parseInt(resolvedSearchParams.min_rent as string) : undefined,
