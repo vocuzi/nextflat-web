@@ -15,14 +15,17 @@ interface PageMastheadProps {
     code: string;
   };
   pageMetadata: PageMetadata | null;
+  localitySlug?: string | null;
 }
 
-export default function PageMasthead({ city, pageMetadata }: PageMastheadProps) {
+export default function PageMasthead({ city, pageMetadata, localitySlug }: PageMastheadProps) {
   const [showWhatsappModal, setShowWhatsappModal] = useState(false);
   const [showPostListingModal, setShowPostListingModal] = useState(false);
 
-  const title = pageMetadata?.page_title || `Flats and Flatmates in ${city.name}`;
-  const description = pageMetadata?.page_desc || `Find Shared Flats, Individual Rooms and Flatmates in ${city.name}. Find your Next Flat with NextFlat!`;
+  const displayLocality = localitySlug ? decodeURIComponent(localitySlug).replace(/-/g, ' ') : null;
+
+  const title = pageMetadata?.page_title || (displayLocality ? `Flats and Flatmates in ${displayLocality}` : `Flats and Flatmates in ${city.name}`);
+  const description = pageMetadata?.page_desc || `Find Shared Flats, Individual Rooms and Flatmates in ${displayLocality || city.name}. Find your Next Flat with NextFlat!`;
   const tgGroup = pageMetadata?.tg_group;
 
   return (
@@ -36,6 +39,12 @@ export default function PageMasthead({ city, pageMetadata }: PageMastheadProps) 
               <Link href="/flats" className="text-slate-800 text-sm">Flats</Link>
               {"/"}
               <Link href={`/flats/${city.slug}`} className="text-slate-800 text-sm">{city.name}</Link>
+              {displayLocality && (
+                <>
+                  {"/"}
+                  <span className="text-slate-800 text-sm font-medium">{displayLocality}</span>
+                </>
+              )}
             </div>
           </div>
           <h1 className="text-3xl md:text-4xl font-bold mb-1">{title}</h1>

@@ -184,6 +184,7 @@ export default async function UnifiedCityPage({
             page={page}
             pageMetadata={pageMetadata}
             initialData={initialData}
+            localitySlug={localitySlug}
         />
     );
 }

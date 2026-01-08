@@ -20,9 +20,10 @@ interface CityListingPageProps {
     page: number;
     pageMetadata: PageMetadata | null;
     initialData: any;
+    localitySlug?: string | null;
 }
 
-export default function CityListingPage({ city, page, pageMetadata, initialData }: CityListingPageProps) {
+export default function CityListingPage({ city, page, pageMetadata, initialData, localitySlug }: CityListingPageProps) {
     const router = useRouter();
     const pathname = usePathname();
     const searchParams = useSearchParams();
@@ -102,7 +103,19 @@ export default function CityListingPage({ city, page, pageMetadata, initialData 
 
     // Helper function to build pagination URL with current filters
     const buildPaginationUrl = (pageNum: number) => {
-        const basePath = pageNum === 1 ? `/flats/${city.slug}` : `/flats/${city.slug}/${pageNum}`;
+        let basePath = `/flats/${city.slug}`;
+
+        if (localitySlug) {
+            basePath += `/${localitySlug}`;
+            if (pageNum > 1) {
+                basePath += `/${pageNum}`;
+            }
+        } else {
+            if (pageNum > 1) {
+                basePath += `/${pageNum}`;
+            }
+        }
+
         const params = new URLSearchParams();
 
         if (filters.genderFilter !== 'all') {
@@ -111,12 +124,17 @@ export default function CityListingPage({ city, page, pageMetadata, initialData 
         if (filters.brokerageFree) {
             params.set('brokerage', 'free');
         }
-        filters.localities.forEach(l => params.append('locality', l));
-        filters.flatTypes.forEach(t => params.append('flat_type', t));
+        filters.localities.forEach((l) => {
+            // If localitySlug is active, we don't need it in query params if it's the same
+            if (l !== localitySlug) {
+                params.append('locality', l);
+            }
+        });
+        filters.flatTypes.forEach((t) => params.append('flat_type', t));
         if (filters.withPhotos) {
             params.set('photos', 'true');
         }
-        filters.allowedTenants.forEach(t => params.append('tenant', t));
+        filters.allowedTenants.forEach((t) => params.append('tenant', t));
         if (filters.minRent > 1000) {
             params.set('min_rent', filters.minRent.toString());
         }
@@ -172,7 +190,7 @@ export default function CityListingPage({ city, page, pageMetadata, initialData 
     return (
         <div className="max-w-7xl mx-auto">
             <Header />
-            <PageMasthead city={city} pageMetadata={pageMetadata} />
+            <PageMasthead city={city} pageMetadata={pageMetadata} localitySlug={localitySlug} />
             <FilterBar
                 city={city}
                 listingCount={totalCount}
