@@ -1,9 +1,11 @@
 import Image from "next/image";
 import Link from "next/link";
-import { Facebook, Instagram, Twitter, Linkedin, Smartphone } from "lucide-react";
-import { FaAppStore } from "react-icons/fa6";
+import { FaAppStore, FaXTwitter } from "react-icons/fa6";
 import { FaGooglePlay } from "react-icons/fa6";
 import { APP_LINKS } from "@/lib/constants";
+import { IoLogoInstagram, IoLogoLinkedin, IoLogoReddit, IoLogoTwitter } from "react-icons/io5";
+import { MdAlternateEmail } from "react-icons/md";
+import { FaTelegramPlane } from "react-icons/fa";
 
 export default function Footer() {
   return (
@@ -20,10 +22,12 @@ export default function Footer() {
               Verified listings, AI-powered matches. Whether you're searching for a shared flat or listing one, NextFlat is built to work for you while you relax.
             </p>
             <div className="flex gap-4">
-              <SocialIcon icon={<Facebook size={18} />} href="#" />
-              <SocialIcon icon={<Instagram size={18} />} href="#" />
-              <SocialIcon icon={<Twitter size={18} />} href="#" />
-              <SocialIcon icon={<Linkedin size={18} />} href="#" />
+              <SocialIcon icon={<IoLogoReddit size={18} />} href="https://www.reddit.com/r/NextFlat/" />
+              <SocialIcon icon={<FaTelegramPlane size={18} />} href="https://t.me/NextFlat" />
+              <SocialIcon icon={<IoLogoInstagram size={18} />} href="https://www.instagram.com/nextflat.in/" />
+              <SocialIcon icon={<FaXTwitter size={18} />} href="https://x.com/nextflat_in" />
+              <SocialIcon icon={<IoLogoLinkedin size={18} />} href="https://www.linkedin.com/company/nextflat-in/" />
+              <SocialIcon icon={<MdAlternateEmail size={18} />} href="mailto:info@nextflat.in" />
             </div>
           </div>
 
@@ -33,8 +37,7 @@ export default function Footer() {
             <ul className="space-y-3 text-sm text-slate-500">
               <li><Link href="/search" className="hover:text-slate-900 transition-colors">Search Flats</Link></li>
               <li><Link href="/post/create" className="hover:text-slate-900 transition-colors">List Your Space</Link></li>
-              <li><Link href="/find-flatmate" className="hover:text-slate-900 transition-colors">Find Flatmates</Link></li>
-              <li><Link href="/cities" className="hover:text-slate-900 transition-colors">All Cities</Link></li>
+              <li><Link href="/alerts/create" className="hover:text-slate-900 transition-colors">Setup Alerts</Link></li>
             </ul>
           </div>
 
@@ -43,7 +46,6 @@ export default function Footer() {
             <h4 className="font-bold text-slate-900">Company</h4>
             <ul className="space-y-3 text-sm text-slate-500">
               <li><Link href="/about" className="hover:text-slate-900 transition-colors">About Us</Link></li>
-              <li><Link href="/careers" className="hover:text-slate-900 transition-colors">Careers</Link></li>
               <li><Link href="/blog" className="hover:text-slate-900 transition-colors">Blog</Link></li>
               <li><Link href="/contact" className="hover:text-slate-900 transition-colors">Contact</Link></li>
             </ul>
@@ -89,6 +91,8 @@ function SocialIcon({ icon, href }: { icon: React.ReactNode; href: string }) {
   return (
     <a
       href={href}
+      target="_blank"
+      rel="noopener noreferrer"
       className="w-8 h-8 flex items-center justify-center rounded-full bg-slate-50 text-slate-400 border border-slate-100 hover:bg-slate-900 hover:text-white hover:border-slate-900 transition-all"
     >
       {icon}
