@@ -9,7 +9,7 @@ import FilterBar, { FilterState } from "@/components/specific/FilterBar";
 import PageMasthead from "@/components/specific/PageMasthead";
 import SEOTextTemplate from "@/components/specific/SEOTemplateFlatListings";
 import Link from "next/link";
-import { PageMetadata } from '@/lib/api';
+import { PageMetadata, SEOData } from '@/lib/api';
 
 interface CityListingPageProps {
     city: {
@@ -21,9 +21,10 @@ interface CityListingPageProps {
     pageMetadata: PageMetadata | null;
     initialData: any;
     localitySlug?: string | null;
+    seoData?: SEOData | null;
 }
 
-export default function CityListingPage({ city, page, pageMetadata, initialData, localitySlug }: CityListingPageProps) {
+export default function CityListingPage({ city, page, pageMetadata, initialData, localitySlug, seoData }: CityListingPageProps) {
     const router = useRouter();
     const pathname = usePathname();
     const searchParams = useSearchParams();
@@ -294,6 +295,7 @@ export default function CityListingPage({ city, page, pageMetadata, initialData,
             <SEOTextTemplate
                 city={city.name}
                 dateUpdated={new Date().toISOString().split("T")[0]}
+                seoData={seoData}
             />
             <Footer />
         </div>

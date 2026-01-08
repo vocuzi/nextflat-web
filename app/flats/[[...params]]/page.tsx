@@ -2,7 +2,7 @@ export const revalidate = 3600; // regenerate every 1 hour
 
 import CityListingPage from "@/components/specific/CityListingPage";
 import activeCities from "@/data/EnabledFeatures";
-import { getPageMetadata, searchFlats, SearchFilters } from "@/lib/api";
+import { getPageMetadata, searchFlats, SearchFilters, getSEOData } from "@/lib/api";
 import { notFound, permanentRedirect } from "next/navigation";
 import { Metadata } from "next";
 
@@ -77,6 +77,9 @@ export async function generateMetadata({
         openGraph: pageImage ? {
             images: [`https://v1apinffk.svc.nextflat.in${pageImage}`],
         } : undefined,
+        alternates: {
+            canonical: `https://nextflat.in/flats/${slug}`,
+        },
     };
 }
 
@@ -176,7 +179,10 @@ export default async function UnifiedCityPage({
     }
 
     // Fetch initial data for SSR
-    const initialData = await searchFlats(searchFilters);
+    const [initialData, seoData] = await Promise.all([
+        searchFlats(searchFilters),
+        getSEOData(city.name)
+    ]);
 
     return (
         <CityListingPage
@@ -185,6 +191,7 @@ export default async function UnifiedCityPage({
             pageMetadata={pageMetadata}
             initialData={initialData}
             localitySlug={localitySlug}
+            seoData={seoData}
         />
     );
 }

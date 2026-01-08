@@ -154,7 +154,7 @@ export default function SeeMoreFlats({
 
                     {/* See All Card */}
                     <a
-                        href={`/flats/${locationSlug}--${localityName}`}
+                        href={`/flats/flats-in-${locationSlug.toLowerCase()}/${localityName}`}
                         className="snap-start shrink-0 w-[200px] min-h-[320px] rounded-lg px-4 border-2 border-dashed border-slate-300
                                    flex flex-col items-center justify-center text-slate-400
                                    hover:border-slate-500 hover:text-slate-700 transition"
