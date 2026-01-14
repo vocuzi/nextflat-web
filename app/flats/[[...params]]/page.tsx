@@ -144,20 +144,18 @@ export default async function UnifiedCityPage({
     const gender = resolvedSearchParams.gender as string;
     const brokerage = resolvedSearchParams.brokerage as string;
 
-    // Ensure localities and flatTypes are arrays
-    const localities = Array.isArray(resolvedSearchParams.locality)
-        ? resolvedSearchParams.locality
-        : (resolvedSearchParams.locality ? [resolvedSearchParams.locality as string] : []);
+    // Helper to parse multi-select parameters (handles both repeated keys and comma-separated values)
+    const parseMultiParam = (param: string | string[] | undefined) => {
+        if (!param) return [];
+        if (Array.isArray(param)) return param.flatMap(p => p.includes(',') ? p.split(',') : p);
+        if (param.includes(',')) return param.split(',');
+        return [param];
+    };
 
-    const flatTypes = Array.isArray(resolvedSearchParams.flat_type)
-        ? resolvedSearchParams.flat_type
-        : (resolvedSearchParams.flat_type ? [resolvedSearchParams.flat_type as string] : []);
-
+    const localities = parseMultiParam(resolvedSearchParams.locality);
+    const flatTypes = parseMultiParam(resolvedSearchParams.flat_type);
     const photos = resolvedSearchParams.photos === 'true';
-
-    const tenants = Array.isArray(resolvedSearchParams.tenant)
-        ? resolvedSearchParams.tenant
-        : (resolvedSearchParams.tenant ? [resolvedSearchParams.tenant as string] : []);
+    const tenants = parseMultiParam(resolvedSearchParams.tenant);
 
     const searchFilters: SearchFilters = {
         city: city.code,

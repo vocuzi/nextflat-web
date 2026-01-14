@@ -82,6 +82,16 @@ export default function FilterBar({ city, listingCount, onFilterChange, currentF
         params.append('available_for', 'Female Only');
       }
 
+      if (currentFilters.localities.length > 0) {
+        params.set('locality', currentFilters.localities.join(','));
+      }
+      if (currentFilters.flatTypes.length > 0) {
+        params.set('flat_type', currentFilters.flatTypes.join(','));
+      }
+      if (currentFilters.allowedTenants.length > 0) {
+        params.set('tenant', currentFilters.allowedTenants.join(','));
+      }
+
       if (currentFilters.minRent > 1000) {
         params.append('min_rent', currentFilters.minRent.toString());
       }

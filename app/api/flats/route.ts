@@ -19,32 +19,36 @@ export async function GET(request: NextRequest) {
     });
 
     // Forward filter parameters if they exist
-    const brokerageApplicable = searchParams.get('brokerage_applicable');
-    if (brokerageApplicable !== null) {
-      apiParams.append('brokerage_applicable', brokerageApplicable);
+    const brokerageApplicable = searchParams.get('brokerage_applicable') || searchParams.get('brokerage');
+    if (brokerageApplicable === 'false' || brokerageApplicable === 'free') {
+      apiParams.append('brokerage_applicable', 'false');
     }
 
-    const availableFor = searchParams.getAll('available_for');
-    if (availableFor.length > 0) {
-      availableFor.forEach(val => apiParams.append('available_for', val));
-    }
+    // Helper to get all values from singular or plural key, potentially comma-separated
+    const getMultiParams = (singular: string, plural: string) => {
+      const all = [...searchParams.getAll(singular), ...searchParams.getAll(plural)];
+      return all.flatMap(val => val.includes(',') ? val.split(',') : val);
+    };
 
-    const localities = searchParams.get('localities');
-    if (localities) {
-      apiParams.append('localities', localities);
-    }
+    const availableFor = getMultiParams('available_for', 'tenant');
+    availableFor.forEach(val => {
+      if (val === 'male' || val === 'Male Only') apiParams.append('available_for', 'Male Only');
+      else if (val === 'female' || val === 'Female Only') apiParams.append('available_for', 'Female Only');
+      else apiParams.append('available_for', val);
+    });
 
-    const flatTypes = searchParams.get('flat_types');
-    if (flatTypes) {
-      apiParams.append('flat_types', flatTypes);
-    }
+    const localities = getMultiParams('locality', 'localities');
+    localities.forEach(l => apiParams.append('localities', l));
 
-    const rentMin = searchParams.get('rent_min');
+    const flatTypes = getMultiParams('flat_type', 'flat_types');
+    flatTypes.forEach(t => apiParams.append('flat_types', t));
+
+    const rentMin = searchParams.get('rent_min') || searchParams.get('min_rent');
     if (rentMin) {
       apiParams.append('rent_min', rentMin);
     }
 
-    const rentMax = searchParams.get('rent_max');
+    const rentMax = searchParams.get('rent_max') || searchParams.get('max_rent');
     if (rentMax) {
       apiParams.append('rent_max', rentMax);
     }

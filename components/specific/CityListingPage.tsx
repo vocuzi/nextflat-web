@@ -40,10 +40,20 @@ export default function CityListingPage({ city, page, pageMetadata, initialData,
     const [filters, setFilters] = useState<FilterState>(() => {
         const genderParam = searchParams.get('gender');
         const brokerageParam = searchParams.get('brokerage');
-        const localities = searchParams.getAll('locality');
-        const flatTypes = searchParams.getAll('flat_type');
+
+        // Helper to get array from comma-separated string or multiple params
+        const getArrayParam = (key: string) => {
+            const all = searchParams.getAll(key);
+            if (all.length === 1 && all[0].includes(',')) {
+                return all[0].split(',');
+            }
+            return all;
+        };
+
+        const localities = getArrayParam('locality');
+        const flatTypes = getArrayParam('flat_type');
         const withPhotos = searchParams.get('photos') === 'true';
-        const allowedTenants = searchParams.getAll('tenant');
+        const allowedTenants = getArrayParam('tenant');
         const minRent = parseInt(searchParams.get('min_rent') || '1000');
         const maxRent = parseInt(searchParams.get('max_rent') || '75000');
 
@@ -69,12 +79,18 @@ export default function CityListingPage({ city, page, pageMetadata, initialData,
         if (filters.brokerageFree) {
             newParams.set('brokerage', 'free');
         }
-        filters.localities.forEach(l => newParams.append('locality', l));
-        filters.flatTypes.forEach(t => newParams.append('flat_type', t));
+        if (filters.localities.length > 0) {
+            newParams.set('locality', filters.localities.join(','));
+        }
+        if (filters.flatTypes.length > 0) {
+            newParams.set('flat_type', filters.flatTypes.join(','));
+        }
         if (filters.withPhotos) {
             newParams.set('photos', 'true');
         }
-        filters.allowedTenants.forEach(t => newParams.append('tenant', t));
+        if (filters.allowedTenants.length > 0) {
+            newParams.set('tenant', filters.allowedTenants.join(','));
+        }
         if (filters.minRent > 1000) {
             newParams.set('min_rent', filters.minRent.toString());
         }
@@ -125,17 +141,21 @@ export default function CityListingPage({ city, page, pageMetadata, initialData,
         if (filters.brokerageFree) {
             params.set('brokerage', 'free');
         }
-        filters.localities.forEach((l) => {
-            // If localitySlug is active, we don't need it in query params if it's the same
-            if (l !== localitySlug) {
-                params.append('locality', l);
+        if (filters.localities.length > 0) {
+            const localitiesToInclude = filters.localities.filter(l => l !== localitySlug);
+            if (localitiesToInclude.length > 0) {
+                params.set('locality', localitiesToInclude.join(','));
             }
-        });
-        filters.flatTypes.forEach((t) => params.append('flat_type', t));
+        }
+        if (filters.flatTypes.length > 0) {
+            params.set('flat_type', filters.flatTypes.join(','));
+        }
         if (filters.withPhotos) {
             params.set('photos', 'true');
         }
-        filters.allowedTenants.forEach((t) => params.append('tenant', t));
+        if (filters.allowedTenants.length > 0) {
+            params.set('tenant', filters.allowedTenants.join(','));
+        }
         if (filters.minRent > 1000) {
             params.set('min_rent', filters.minRent.toString());
         }

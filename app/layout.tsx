@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Readex_Pro } from "next/font/google";
 import { GoogleAnalytics } from '@next/third-parties/google'
+import AlertBannerModal from "@/components/modals/AlertBannerModal";
 import "./globals.css";
 
 const readex_pro = Readex_Pro({
@@ -115,6 +116,7 @@ export default function RootLayout({
         className={`${readex_pro.variable} antialiased`}
       >
         {children}
+        <AlertBannerModal />
       </body>
       <GoogleAnalytics gaId={"G-JVN4JD7VGQ"} />
     </html>
